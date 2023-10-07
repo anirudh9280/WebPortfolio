@@ -28,7 +28,7 @@ const About = () => {
         <h2 className={styles.sectionHeadText}>Overview.</h2>
       </motion.div>
       <motion.p variants={fadeIn("", "", 0.1, 1)} className="mt-4 text-secondary text-[17px] max-w-3xl leading-[30px]">
-        I'm a current freshman enrolled as a Data Science Major at University of California: San Diego. I have experience in FullStack Development and and well-versed in Javascript and frameworks such as React, Node.js, and Three.js. I am eager to apply the concepts I learn in the classroom to real-world scenarios and contribute to meaningful projects. My goal is to secure an internship opportunity that allows me to collaborate with current professionals in the industry, learn from their experiences and industry practices, and make a tangible impact through data-driven insights.
+        I'm a current freshman enrolled as a Data Science Major at University of California: San Diego. I have experience in FullStack Development and well-versed in Javascript and frameworks such as React, Node.js, and Three.js. I am eager to apply the concepts I learn in the classroom to real-world scenarios and contribute to meaningful projects. My goal is to secure an internship opportunity that allows me to collaborate with current professionals in the industry, learn from their experiences and industry practices, and make a tangible impact through data-driven insights.
       </motion.p>
       <div className="mt-20 flex flex-wrap gap-10">
         {services.map((service, index) => (<ServiceCard key={service.title} index={index} {...service} />))}
