@@ -209,9 +209,9 @@ const projects = [
         source_code_link: "https://github.com/annabathula28/van-life4.git",
     },
     {
-        name: "Job IT",
+        name: "Ecommerce Site",
         description:
-            "Web application that enables users to search for job openings, view estimated salary ranges for positions, and locate available jobs based on their current location.",
+            "Web application that allows users to browse for items and add it to a cart.",
         tags: [
             {
                 name: "react",
@@ -222,36 +222,15 @@ const projects = [
                 color: "green-text-gradient",
             },
             {
-                name: "scss",
+                name: "tailwind",
                 color: "pink-text-gradient",
             },
         ],
         image: jobit,
-        deploy_code_link: "",
-        source_code_link: "https://github.com/",
+        deploy_code_link: "https://ecommerce-74a54.web.app/",
+        source_code_link: "https://github.com/annabathula28/EcommerceSite.git",
     },
-    {
-        name: "Trip Guide",
-        description:
-            "A comprehensive travel booking platform that allows users to book flights, hotels, and rental cars, and offers curated recommendations for popular destinations.",
-        tags: [
-            {
-                name: "nextjs",
-                color: "blue-text-gradient",
-            },
-            {
-                name: "supabase",
-                color: "green-text-gradient",
-            },
-            {
-                name: "css",
-                color: "pink-text-gradient",
-            },
-        ],
-        image: tripguide,
-        deploy_code_link: "",
-        source_code_link: "https://github.com/",
-    },
+
 ];
 
 export { services, technologies, experiences, testimonials, projects };
