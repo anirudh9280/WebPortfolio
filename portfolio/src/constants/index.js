@@ -25,6 +25,7 @@ import {
     jobit,
     tripguide,
     threejs,
+    ecommerce,
 } from "../assets";
 
 export const navLinks = [
@@ -226,7 +227,7 @@ const projects = [
                 color: "pink-text-gradient",
             },
         ],
-        image: jobit,
+        image: ecommerce,
         deploy_code_link: "https://ecommerce-74a54.web.app/",
         source_code_link: "https://github.com/annabathula28/EcommerceSite.git",
     },
