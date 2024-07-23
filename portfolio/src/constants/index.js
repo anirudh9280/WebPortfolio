@@ -1,4 +1,5 @@
 import {
+    imagerender,
     van,
     tutor, 
     mobile,
@@ -49,15 +50,15 @@ const services = [
         icon: web,
     },
     {
-        title: "Web Developer",
+        title: "ML Engineer",
         icon: web,
     },
     {
-        title: "Backend Developer",
+        title: "Full-Stack Developer",
         icon: backend,
     },
     {
-        title: "UI/UX Designer",
+        title: "AI Researcher",
         icon: creator,
     },
 ];
@@ -80,16 +81,21 @@ const technologies = [
         icon: html,
     },
     {
-        name: "HTML 5",
+        name: "PyTorch",
         icon: html,
     },
     {
-        name: "CSS 3",
+        name: "Java",
         icon: css,
     },
     {
         name: "JavaScript",
         icon: javascript,
+    },
+    {
+        name: "Python",
+        icon: html,
+
     },
     {
         name: "TypeScript",
@@ -116,6 +122,10 @@ const technologies = [
         icon: threejs,
     },
     {
+        name: "OpenCV",
+        icon: docker,
+    },
+    {
         name: "git",
         icon: git,
     },
@@ -125,6 +135,14 @@ const technologies = [
     },
     {
         name: "Docker",
+        icon: docker,
+    },
+    {
+        name: "Keras",
+        icon: docker,
+    },
+    {
+        name: "NLTK",
         icon: docker,
     },
 ];
@@ -216,11 +234,11 @@ const projects = [
         tags: [
             {
                 name: "react",
-                color: "blue-text-gradient",
+                color: "red-text-gradient",
             },
             {
                 name: "restapi",
-                color: "green-text-gradient",
+                color: "yellow-text-gradient",
             },
             {
                 name: "tailwind",
@@ -230,6 +248,28 @@ const projects = [
         image: ecommerce,
         deploy_code_link: "https://ecommerce-74a54.web.app/",
         source_code_link: "https://github.com/annabathula28/EcommerceSite.git",
+    },
+    {
+        name: "Number Classifier (KNN)",
+        description:
+            "Implemented a custom PriorityQueue in Java for efficient k-nearest neighbors classification, achieving over 90% accuracy on handwritten digits with interactive graphical visualization.",
+        tags: [
+            {
+                name: "java",
+                color: "purple-text-gradient",
+            },
+            {
+                name: "PriorityQueue",
+                color: "green-text-gradient",
+            },
+            {
+                name: "Image-Rendering",
+                color: "orange-text-gradient",
+            },
+        ],
+        image: imagerender,
+        deploy_code_link: "https://github.com/anirudh9280/Number-Classifier-",
+        source_code_link: "https://github.com/anirudh9280/Number-Classifier-",
     },
 
 ];

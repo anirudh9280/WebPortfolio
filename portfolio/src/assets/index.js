@@ -5,9 +5,10 @@ import mobile from "./mobile.png";
 import web from "./web.png";
 import github from "./github.png";
 import menu from "./menu.svg";
+import imagerender from "./imagerender.png"
 import close from "./close.svg";
 import tutor from "./company/tutor.png"
-
+import ecommerce from "./ecommerce.png"
 import css from "./tech/css.png";
 import docker from "./tech/docker.png";
 import figma from "./tech/figma.png";
@@ -41,7 +42,9 @@ export {
   mobile,
   web,
   github,
+  imagerender,
   menu,
+  ecommerce,
   close,
   css,
   docker,
