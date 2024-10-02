@@ -1,4 +1,5 @@
 import logo from "./logo.svg";
+import blackscholes from "./blackscholesimage.png"
 import backend from "./backend.png";
 import creator from "./creator.png";
 import mobile from "./mobile.png";
@@ -29,12 +30,16 @@ import starbucks from "./company/starbucks.png";
 import tesla from "./company/tesla.png";
 
 import van from "./van.png"
+import vigilai from "./vigilai.png"
 import carrent from "./carrent.png";
 import jobit from "./jobit.png";
 import tripguide from "./tripguide.png";
+import ucsdlogo from './ucsdlogo.png'
 
 export {
+  ucsdlogo,
   logo,
+  vigilai,
   van,
   tutor,
   backend,
@@ -66,4 +71,5 @@ export {
   carrent,
   jobit,
   tripguide,
+  blackscholes,
 };

@@ -1,5 +1,8 @@
 import {
+    blackscholes, 
     imagerender,
+    ucsdlogo,
+    vigilai,
     van,
     tutor, 
     mobile,
@@ -149,6 +152,31 @@ const technologies = [
 
 const experiences = [
     {
+        title: "Machine Learning Intern",
+        company_name: "VigilAI", 
+        icon: vigilai,
+        iconBg: "#383E56",
+        date: "Aug 2024 - PRESENT",
+        points: [
+           "Prepared large datasets from body camera footage, including cleaning, labeling, and feature engineering",
+           "Developed machine learning models for real-time analysis, improving detection of protocol deviations",
+           "Built user-facing features like speech isolation and auto-redaction to enhance usability and privacy compliance",
+        ],
+   },
+    {
+        title: "Undergraduate Researcher",
+        company_name: "Sensory Communication Lab - UCSD", 
+        icon: ucsdlogo,
+        iconBg: "#3b444b",
+        date: "Aug 2024 - PRESENT",
+        points: [
+           "Developed an interactive spectrogram tool using React, enabling real-time frequency visualization and generation",
+           "Implemented dynamic frequency filters for real-time audio processing and enhanced user interaction",
+           "Integrated sound synthesis controls, including timbre selection and tuning modes, for diverse auditory experiences",
+           "Visit the website here -> https://spectrogram.sciencemusic.org/",
+        ],
+   },
+    {
         title: "Python Tutor",
         company_name: "Tri-Valley Excel",
         icon: tutor,
@@ -158,7 +186,6 @@ const experiences = [
             "Created customized learning plans for students based on current skill levels, goals, and areas of interest.",
             "Curated unique assignments and assessments along with interactive projects to establish a strong foundation in programming. ",
             "Prepared students for future high school and extracurricular courses that are offered.",
-            "Hosted virtual webinars to educate parents and students about high school and college classes.",
         ],
     },
     //{
@@ -205,6 +232,28 @@ const testimonials = [
 ];
 
 const projects = [
+    {
+        name: "Black-Scholes Option Pricer",
+        description:
+            "Calculate European call and put option prices using the Black-Scholes model. Enter asset price, volatility, expiration, risk-free rate, and option type for instant results, with dynamic graphs showing real-time Greek values for added insights.",
+        tags: [
+            {
+                name: "python",
+                color: "red-text-gradient",
+            },
+            {
+                name: "django",
+                color: "yellow-text-gradient",
+            },
+            {
+                name: "numpy",
+                color: "pink-text-gradient",
+            },
+        ],
+        image: blackscholes,
+        deploy_code_link: "https://blackscholesapp-e835e285f907.herokuapp.com/",
+        source_code_link: "https://github.com/anirudh9280/Black-Scholes.git",
+    },
     {
         name: "Vanlife",
         description:
