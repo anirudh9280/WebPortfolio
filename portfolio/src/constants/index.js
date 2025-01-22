@@ -1,9 +1,11 @@
 import {
+    tse,
     blackscholes, 
     imagerender,
     ucsdlogo,
-    vigilai,
     van,
+    streamerstakes,
+    ds3,
     tutor, 
     mobile,
     backend,
@@ -141,67 +143,94 @@ const technologies = [
         icon: docker,
     },
     {
-        name: "Keras",
+        name: "NLTK",
         icon: docker,
     },
     {
-        name: "NLTK",
+        name: "R",
+        icon: docker,
+    },
+    {
+        name: "SQL",
         icon: docker,
     },
 ];
 
 const experiences = [
-    {
-        title: "Machine Learning Intern",
-        company_name: "VigilAI", 
-        icon: vigilai,
-        iconBg: "#383E56",
-        date: "Aug 2024 - PRESENT",
-        points: [
-           "Prepared large datasets from body camera footage, including cleaning, labeling, and feature engineering",
-           "Developed machine learning models for real-time analysis, improving detection of protocol deviations",
-           "Built user-facing features like speech isolation and auto-redaction to enhance usability and privacy compliance",
-        ],
-   },
-    {
-        title: "Undergraduate Researcher",
-        company_name: "Sensory Communication Lab - UCSD", 
-        icon: ucsdlogo,
-        iconBg: "#3b444b",
-        date: "Aug 2024 - PRESENT",
-        points: [
-           "Developed an interactive spectrogram tool using React, enabling real-time frequency visualization and generation",
-           "Implemented dynamic frequency filters for real-time audio processing and enhanced user interaction",
-           "Integrated sound synthesis controls, including timbre selection and tuning modes, for diverse auditory experiences",
-           "Visit the website here -> https://spectrogram.sciencemusic.org/",
-        ],
-   },
-    {
-        title: "Python Tutor",
-        company_name: "Tri-Valley Excel",
-        icon: tutor,
-        iconBg: "#383E56",
-        date: "October 2020 - May 2023",
-        points: [
-            "Created customized learning plans for students based on current skill levels, goals, and areas of interest.",
-            "Curated unique assignments and assessments along with interactive projects to establish a strong foundation in programming. ",
-            "Prepared students for future high school and extracurricular courses that are offered.",
-        ],
-    },
-    //{
-        //title: "Full stack Developer",
-        //company_name: "Meta",
-        //icon: meta,
-        //iconBg: "#E6DEDD",
-        //date: "Jan 2023 - Present",
-        //points: [
-           // "Developing and maintaining web applications using React.js and other related technologies.",
-           // "Collaborating with cross-functional teams including designers, product managers, and other developers to create high-quality products.",
-            //"Implementing responsive design and ensuring cross-browser compatibility.",
-           // "Participating in code reviews and providing constructive feedback to other developers.",
-        //],
-   // },
-    
+  {
+    title: "Software Engineer Intern",
+    company_name: "StreamerStakes",
+    icon: streamerstakes,
+    iconBg: "#383E56",
+    date: "Aug 2024 - Dec 2024",
+    points: [
+      "Developed an AI-driven internal tool using LLM models to generate marketing ideas for games hosted on the site",
+      "Built a React frontend and Node.js backend, streamlining the marketing team’s content creation process",
+      "Enhanced marketing efficiency by automating the generation of tailored promotional content",
+    ],
+  },
+  {
+    title: "Undergraduate Researcher",
+    company_name: "Sensory Communication Lab - UCSD",
+    icon: ucsdlogo,
+    iconBg: "#3b444b",
+    date: "Aug 2024 - PRESENT",
+    points: [
+      "Developed an interactive spectrogram tool using React, enabling real-time frequency visualization and generation",
+      "Implemented dynamic frequency filters for real-time audio processing and enhanced user interaction",
+      "Integrated sound synthesis controls, including timbre selection and tuning modes, for diverse auditory experiences",
+      "Visit the website here -> https://spectrogram.sciencemusic.org/",
+    ],
+  },
+  {
+    title: "Assistant Project Director & Software Developer",
+    company_name: "Data Science Student Alliance, UCSD",
+    icon: ds3,
+    iconBg: "#3b444b",
+    date: "Nov 2024 - PRESENT",
+    points: [
+      "Led 12+ data science projects, mentoring teams on AI model optimization",
+      "Matched project ideas with teams based on expertise and organized showcases and workshops",
+      "Enhanced the DS3 website using Svelte and MongoDB, boosting user engagement and backend performance",
+    ],
+  },
+  {
+    title: "Software Developer",
+    company_name: "Triton Software Engineering, UCSD",
+    icon: tse,
+    iconBg: "#3b444b",
+    date: "Dec 2024 - PRESENT",
+    points: [
+      "Engineered software solutions for nonprofit organizations, utilizing tools such as Docker and Postman",
+      "Built scalable apps using React Native and Expo and web platforms with Express.js and MongoDB",
+      "Followed Agile methodologies to simulate professional development, ensuring efficient team collaboration",
+    ],
+  },
+  {
+    title: "Python Tutor",
+    company_name: "Tri-Valley Excel",
+    icon: tutor,
+    iconBg: "#383E56",
+    date: "October 2020 - May 2023",
+    points: [
+      "Created customized learning plans for students based on current skill levels, goals, and areas of interest.",
+      "Curated unique assignments and assessments along with interactive projects to establish a strong foundation in programming. ",
+      "Prepared students for future high school and extracurricular courses that are offered.",
+    ],
+  },
+  //{
+  //title: "Full stack Developer",
+  //company_name: "Meta",
+  //icon: meta,
+  //iconBg: "#E6DEDD",
+  //date: "Jan 2023 - Present",
+  //points: [
+  // "Developing and maintaining web applications using React.js and other related technologies.",
+  // "Collaborating with cross-functional teams including designers, product managers, and other developers to create high-quality products.",
+  //"Implementing responsive design and ensuring cross-browser compatibility.",
+  // "Participating in code reviews and providing constructive feedback to other developers.",
+  //],
+  // },
 ];
 
 const testimonials = [

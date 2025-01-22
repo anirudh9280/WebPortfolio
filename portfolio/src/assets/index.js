@@ -32,11 +32,17 @@ import tesla from "./company/tesla.png";
 import van from "./van.png"
 import vigilai from "./vigilai.png"
 import carrent from "./carrent.png";
+import streamerstakes from "./streamerstakes.png"
+import ds3 from "./ds3.png"
+import tse from "./tse.png"
 import jobit from "./jobit.png";
 import tripguide from "./tripguide.png";
 import ucsdlogo from './ucsdlogo.png'
 
 export {
+  tse,
+  ds3, 
+  streamerstakes,
   ucsdlogo,
   logo,
   vigilai,
