@@ -1,162 +1,165 @@
 import {
-    tse,
-    blackscholes, 
-    imagerender,
-    ucsdlogo,
-    van,
-    streamerstakes,
-    ds3,
-    tutor, 
-    mobile,
-    backend,
-    creator,
-    web,
-    javascript,
-    typescript,
-    html,
-    css,
-    reactjs,
-    redux,
-    tailwind,
-    nodejs,
-    mongodb,
-    git,
-    figma,
-    docker,
-    meta,
-    starbucks,
-    tesla,
-    shopify,
-    carrent,
-    jobit,
-    tripguide,
-    threejs,
-    ecommerce,
+  tse,
+  blackscholes,
+  imagerender,
+  ucsdlogo,
+  van,
+  streamerstakes,
+  ds3,
+  tutor,
+  hemut,
+  backend,
+  creator,
+  web,
+  javascript,
+  typescript,
+  html,
+  css,
+  reactjs,
+  tailwind,
+  nodejs,
+  mongodb,
+  git,
+  figma,
+  docker,
+  threejs,
+  ecommerce,
 } from "../assets";
 
 export const navLinks = [
-    {
-        id: "about",
-        title: "About",
-    },
-    {
-        id: "work",
-        title: "Work",
-    },
-    {
-        id: "contact",
-        title: "Contact",
-    },
+  {
+    id: "about",
+    title: "About",
+  },
+  {
+    id: "work",
+    title: "Work",
+  },
+  {
+    id: "contact",
+    title: "Contact",
+  },
 ];
 
 const services = [
-    {
-        title: "Data Scientist",
-        icon: web,
-    },
-    {
-        title: "ML Engineer",
-        icon: web,
-    },
-    {
-        title: "Full-Stack Developer",
-        icon: backend,
-    },
-    {
-        title: "AI Researcher",
-        icon: creator,
-    },
+  {
+    title: "Data Scientist",
+    icon: web,
+  },
+  {
+    title: "ML Engineer",
+    icon: web,
+  },
+  {
+    title: "Full-Stack Developer",
+    icon: backend,
+  },
+  {
+    title: "AI Researcher",
+    icon: creator,
+  },
 ];
 
 const technologies = [
-    {
-        name: "Pandas",
-        icon: html,
-    },
-    {
-        name: "Matplotlib",
-        icon: html,
-    },
-    {
-        name: "Numpy",
-        icon: html,
-    },
-    {
-        name: "TensorFlow",
-        icon: html,
-    },
-    {
-        name: "PyTorch",
-        icon: html,
-    },
-    {
-        name: "Java",
-        icon: css,
-    },
-    {
-        name: "JavaScript",
-        icon: javascript,
-    },
-    {
-        name: "Python",
-        icon: html,
-
-    },
-    {
-        name: "TypeScript",
-        icon: typescript,
-    },
-    {
-        name: "React JS",
-        icon: reactjs,
-    },
-    {
-        name: "Tailwind CSS",
-        icon: tailwind,
-    },
-    {
-        name: "Node JS",
-        icon: nodejs,
-    },
-    {
-        name: "MongoDB",
-        icon: mongodb,
-    },
-    {
-        name: "Three JS",
-        icon: threejs,
-    },
-    {
-        name: "OpenCV",
-        icon: docker,
-    },
-    {
-        name: "git",
-        icon: git,
-    },
-    {
-        name: "Figma",
-        icon: figma,
-    },
-    {
-        name: "Docker",
-        icon: docker,
-    },
-    {
-        name: "NLTK",
-        icon: docker,
-    },
-    {
-        name: "R",
-        icon: docker,
-    },
-    {
-        name: "SQL",
-        icon: docker,
-    },
+  {
+    name: "Pandas",
+    icon: html,
+  },
+  {
+    name: "Matplotlib",
+    icon: html,
+  },
+  {
+    name: "Numpy",
+    icon: html,
+  },
+  {
+    name: "TensorFlow",
+    icon: html,
+  },
+  {
+    name: "PyTorch",
+    icon: html,
+  },
+  {
+    name: "Java",
+    icon: css,
+  },
+  {
+    name: "JavaScript",
+    icon: javascript,
+  },
+  {
+    name: "Python",
+    icon: html,
+  },
+  {
+    name: "TypeScript",
+    icon: typescript,
+  },
+  {
+    name: "React JS",
+    icon: reactjs,
+  },
+  {
+    name: "Tailwind CSS",
+    icon: tailwind,
+  },
+  {
+    name: "Node JS",
+    icon: nodejs,
+  },
+  {
+    name: "MongoDB",
+    icon: mongodb,
+  },
+  {
+    name: "Three JS",
+    icon: threejs,
+  },
+  {
+    name: "OpenCV",
+    icon: docker,
+  },
+  {
+    name: "git",
+    icon: git,
+  },
+  {
+    name: "Figma",
+    icon: figma,
+  },
+  {
+    name: "Docker",
+    icon: docker,
+  },
+  {
+    name: "NLTK",
+    icon: docker,
+  },
+  {
+    name: "R",
+    icon: docker,
+  },
+  {
+    name: "SQL",
+    icon: docker,
+  },
 ];
 
 const experiences = [
+  {
+    title: "Software Developer Intern",
+    company_name: "Hemut",
+    icon: hemut,
+    iconBg: "#383E56",
+    date: "December 2024 - May 2025",
+    points: [
+      "Integrated real-time API data to access fuel prices across major trucking routes",
+      "Built a graph structure to map stops and fueling stations with cost and distance weights",
+      "Utilized the A* algorithm with an admissible heuristic to compute optimal routes dependent on cost and distance",
+    ],
+  },
   {
     title: "Software Engineer Intern",
     company_name: "StreamerStakes",
@@ -165,7 +168,7 @@ const experiences = [
     date: "Aug 2024 - Dec 2024",
     points: [
       "Developed an AI-driven internal tool using LLM models to generate marketing ideas for games hosted on the site",
-      "Built a React frontend and Node.js backend, streamlining the marketing team’s content creation process",
+      "Built a React frontend and Node.js backend, streamlining the marketing team's content creation process",
       "Enhanced marketing efficiency by automating the generation of tailored promotional content",
     ],
   },
@@ -176,10 +179,13 @@ const experiences = [
     iconBg: "#3b444b",
     date: "Aug 2024 - PRESENT",
     points: [
-      "Developed an interactive spectrogram tool using React, enabling real-time frequency visualization and generation",
-      "Implemented dynamic frequency filters for real-time audio processing and enhanced user interaction",
-      "Integrated sound synthesis controls, including timbre selection and tuning modes, for diverse auditory experiences",
-      "Visit the website here -> https://spectrogram.sciencemusic.org/",
+      "Developed an interactive spectrogram visualization tool using React that enables real-time frequency analysis and manipulation of audio signals",
+      "Designed and implemented dynamic frequency filters with customizable parameters, enhancing user control over audio processing and synthesis",
+      "Visit the website: https://spectrogram.sciencemusic.org/",
+      "<divider/>",
+      "Built a modular audio flow programming interface with React and Tone.js, allowing users to create complex audio sequences through node-based connections",
+      "Implemented interval and timing control systems that enable precise audio event scheduling and dynamic parameter adjustments during playback",
+      "Visit the website: https://mflow.sciencemusic.org/",
     ],
   },
   {
@@ -234,122 +240,121 @@ const experiences = [
 ];
 
 const testimonials = [
-    {
-        testimonial:
-            "I thought it was impossible to make a website as beautiful as our product, but Rick proved me wrong.",
-        name: "Sara Lee",
-        designation: "CFO",
-        company: "Acme Co",
-        image: "https://randomuser.me/api/portraits/women/4.jpg",
-    },
-    {
-        testimonial:
-            "I've never met a web developer who truly cares about their clients' success like Rick does.",
-        name: "Chris Brown",
-        designation: "COO",
-        company: "DEF Corp",
-        image: "https://randomuser.me/api/portraits/men/5.jpg",
-    },
-    {
-        testimonial:
-            "After Rick optimized our website, our traffic increased by 50%. We can't thank them enough!",
-        name: "Lisa Wang",
-        designation: "CTO",
-        company: "456 Enterprises",
-        image: "https://randomuser.me/api/portraits/women/6.jpg",
-    },
+  {
+    testimonial:
+      "I thought it was impossible to make a website as beautiful as our product, but Rick proved me wrong.",
+    name: "Sara Lee",
+    designation: "CFO",
+    company: "Acme Co",
+    image: "https://randomuser.me/api/portraits/women/4.jpg",
+  },
+  {
+    testimonial:
+      "I've never met a web developer who truly cares about their clients' success like Rick does.",
+    name: "Chris Brown",
+    designation: "COO",
+    company: "DEF Corp",
+    image: "https://randomuser.me/api/portraits/men/5.jpg",
+  },
+  {
+    testimonial:
+      "After Rick optimized our website, our traffic increased by 50%. We can't thank them enough!",
+    name: "Lisa Wang",
+    designation: "CTO",
+    company: "456 Enterprises",
+    image: "https://randomuser.me/api/portraits/women/6.jpg",
+  },
 ];
 
 const projects = [
-    {
-        name: "Black-Scholes Option Pricer",
-        description:
-            "Calculate European call and put option prices using the Black-Scholes model. Enter asset price, volatility, expiration, risk-free rate, and option type for instant results, with dynamic graphs showing real-time Greek values for added insights.",
-        tags: [
-            {
-                name: "python",
-                color: "red-text-gradient",
-            },
-            {
-                name: "django",
-                color: "yellow-text-gradient",
-            },
-            {
-                name: "numpy",
-                color: "pink-text-gradient",
-            },
-        ],
-        image: blackscholes,
-        deploy_code_link: "https://blackscholesapp-e835e285f907.herokuapp.com/",
-        source_code_link: "https://github.com/anirudh9280/Black-Scholes.git",
-    },
-    {
-        name: "Vanlife",
-        description:
-            "Web-based platform that allows users to search, book, and manage van rentals from various providers, providing a convenient and efficient solution for transportation needs.",
-        tags: [
-            {
-                name: "react",
-                color: "blue-text-gradient",
-            },
-            {
-                name: "firebase",
-                color: "green-text-gradient",
-            },
-            {
-                name: "authentication",
-                color: "pink-text-gradient",
-            },
-        ],
-        image: van,
-        deploy_code_link: "https://gleeful-frangollo-4aef40.netlify.app/",
-        source_code_link: "https://github.com/annabathula28/van-life4.git",
-    },
-    {
-        name: "Ecommerce Site",
-        description:
-            "Web application that allows users to browse for items and add it to a cart.",
-        tags: [
-            {
-                name: "react",
-                color: "red-text-gradient",
-            },
-            {
-                name: "restapi",
-                color: "yellow-text-gradient",
-            },
-            {
-                name: "tailwind",
-                color: "pink-text-gradient",
-            },
-        ],
-        image: ecommerce,
-        deploy_code_link: "https://ecommerce-74a54.web.app/",
-        source_code_link: "https://github.com/annabathula28/EcommerceSite.git",
-    },
-    {
-        name: "Number Classifier (KNN)",
-        description:
-            "Implemented a custom PriorityQueue in Java for efficient k-nearest neighbors classification, achieving over 90% accuracy on handwritten digits with interactive graphical visualization.",
-        tags: [
-            {
-                name: "java",
-                color: "purple-text-gradient",
-            },
-            {
-                name: "PriorityQueue",
-                color: "green-text-gradient",
-            },
-            {
-                name: "Image-Rendering",
-                color: "orange-text-gradient",
-            },
-        ],
-        image: imagerender,
-        deploy_code_link: "https://github.com/anirudh9280/Number-Classifier-",
-        source_code_link: "https://github.com/anirudh9280/Number-Classifier-",
-    },
-
+  {
+    name: "Black-Scholes Option Pricer",
+    description:
+      "Calculate European call and put option prices using the Black-Scholes model. Enter asset price, volatility, expiration, risk-free rate, and option type for instant results, with dynamic graphs showing real-time Greek values for added insights.",
+    tags: [
+      {
+        name: "python",
+        color: "red-text-gradient",
+      },
+      {
+        name: "django",
+        color: "yellow-text-gradient",
+      },
+      {
+        name: "numpy",
+        color: "pink-text-gradient",
+      },
+    ],
+    image: blackscholes,
+    deploy_code_link: "https://blackscholesapp-e835e285f907.herokuapp.com/",
+    source_code_link: "https://github.com/anirudh9280/Black-Scholes.git",
+  },
+  {
+    name: "Vanlife",
+    description:
+      "Web-based platform that allows users to search, book, and manage van rentals from various providers, providing a convenient and efficient solution for transportation needs.",
+    tags: [
+      {
+        name: "react",
+        color: "blue-text-gradient",
+      },
+      {
+        name: "firebase",
+        color: "green-text-gradient",
+      },
+      {
+        name: "authentication",
+        color: "pink-text-gradient",
+      },
+    ],
+    image: van,
+    deploy_code_link: "https://gleeful-frangollo-4aef40.netlify.app/",
+    source_code_link: "https://github.com/annabathula28/van-life4.git",
+  },
+  {
+    name: "Ecommerce Site",
+    description:
+      "Web application that allows users to browse for items and add it to a cart.",
+    tags: [
+      {
+        name: "react",
+        color: "red-text-gradient",
+      },
+      {
+        name: "restapi",
+        color: "yellow-text-gradient",
+      },
+      {
+        name: "tailwind",
+        color: "pink-text-gradient",
+      },
+    ],
+    image: ecommerce,
+    deploy_code_link: "https://ecommerce-74a54.web.app/",
+    source_code_link: "https://github.com/annabathula28/EcommerceSite.git",
+  },
+  {
+    name: "Number Classifier (KNN)",
+    description:
+      "Implemented a custom PriorityQueue in Java for efficient k-nearest neighbors classification, achieving over 90% accuracy on handwritten digits with interactive graphical visualization.",
+    tags: [
+      {
+        name: "java",
+        color: "purple-text-gradient",
+      },
+      {
+        name: "PriorityQueue",
+        color: "green-text-gradient",
+      },
+      {
+        name: "Image-Rendering",
+        color: "orange-text-gradient",
+      },
+    ],
+    image: imagerender,
+    deploy_code_link: "https://github.com/anirudh9280/Number-Classifier-",
+    source_code_link: "https://github.com/anirudh9280/Number-Classifier-",
+  },
 ];
 
 export { services, technologies, experiences, testimonials, projects };

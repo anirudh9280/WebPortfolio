@@ -1,15 +1,15 @@
 import logo from "./logo.svg";
-import blackscholes from "./blackscholesimage.png"
+import blackscholes from "./blackscholesimage.png";
 import backend from "./backend.png";
 import creator from "./creator.png";
 import mobile from "./mobile.png";
 import web from "./web.png";
 import github from "./github.png";
 import menu from "./menu.svg";
-import imagerender from "./imagerender.png"
+import imagerender from "./imagerender.png";
 import close from "./close.svg";
-import tutor from "./company/tutor.png"
-import ecommerce from "./ecommerce.png"
+import tutor from "./company/tutor.png";
+import ecommerce from "./ecommerce.png";
 import css from "./tech/css.png";
 import docker from "./tech/docker.png";
 import figma from "./tech/figma.png";
@@ -29,19 +29,20 @@ import shopify from "./company/shopify.png";
 import starbucks from "./company/starbucks.png";
 import tesla from "./company/tesla.png";
 
-import van from "./van.png"
-import vigilai from "./vigilai.png"
+import van from "./van.png";
+import vigilai from "./vigilai.png";
 import carrent from "./carrent.png";
-import streamerstakes from "./streamerstakes.png"
-import ds3 from "./ds3.png"
-import tse from "./tse.png"
+import streamerstakes from "./streamerstakes.png";
+import ds3 from "./ds3.png";
+import tse from "./tse.png";
 import jobit from "./jobit.png";
 import tripguide from "./tripguide.png";
-import ucsdlogo from './ucsdlogo.png'
+import ucsdlogo from "./ucsdlogo.png";
+import hemut from "./hemut.png";
 
 export {
   tse,
-  ds3, 
+  ds3,
   streamerstakes,
   ucsdlogo,
   logo,
@@ -78,4 +79,5 @@ export {
   jobit,
   tripguide,
   blackscholes,
+  hemut,
 };

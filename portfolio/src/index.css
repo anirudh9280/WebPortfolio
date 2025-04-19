@@ -10,7 +10,19 @@
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
   scroll-behavior: smooth;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.dark-mode * {
   color-scheme: dark;
+}
+
+.light-mode * {
+  color-scheme: light;
 }
 
 .hash-span {
@@ -129,7 +141,8 @@
 @keyframes mulShdSpin {
   0%,
   100% {
-    box-shadow: 0em -2.6em 0em 0em #ffffff,
+    box-shadow:
+      0em -2.6em 0em 0em #ffffff,
       1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2),
       2.5em 0em 0 0em rgba(255, 255, 255, 0.2),
       1.75em 1.75em 0 0em rgba(255, 255, 255, 0.2),
@@ -139,8 +152,10 @@
       -1.8em -1.8em 0 0em rgba(255, 255, 255, 0.7);
   }
   12.5% {
-    box-shadow: 0em -2.6em 0em 0em rgba(255, 255, 255, 0.7),
-      1.8em -1.8em 0 0em #ffffff, 2.5em 0em 0 0em rgba(255, 255, 255, 0.2),
+    box-shadow:
+      0em -2.6em 0em 0em rgba(255, 255, 255, 0.7),
+      1.8em -1.8em 0 0em #ffffff,
+      2.5em 0em 0 0em rgba(255, 255, 255, 0.2),
       1.75em 1.75em 0 0em rgba(255, 255, 255, 0.2),
       0em 2.5em 0 0em rgba(255, 255, 255, 0.2),
       -1.8em 1.8em 0 0em rgba(255, 255, 255, 0.2),
@@ -148,8 +163,10 @@
       -1.8em -1.8em 0 0em rgba(255, 255, 255, 0.5);
   }
   25% {
-    box-shadow: 0em -2.6em 0em 0em rgba(255, 255, 255, 0.5),
-      1.8em -1.8em 0 0em rgba(255, 255, 255, 0.7), 2.5em 0em 0 0em #ffffff,
+    box-shadow:
+      0em -2.6em 0em 0em rgba(255, 255, 255, 0.5),
+      1.8em -1.8em 0 0em rgba(255, 255, 255, 0.7),
+      2.5em 0em 0 0em #ffffff,
       1.75em 1.75em 0 0em rgba(255, 255, 255, 0.2),
       0em 2.5em 0 0em rgba(255, 255, 255, 0.2),
       -1.8em 1.8em 0 0em rgba(255, 255, 255, 0.2),
@@ -157,48 +174,262 @@
       -1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2);
   }
   37.5% {
-    box-shadow: 0em -2.6em 0em 0em rgba(255, 255, 255, 0.2),
+    box-shadow:
+      0em -2.6em 0em 0em rgba(255, 255, 255, 0.2),
       1.8em -1.8em 0 0em rgba(255, 255, 255, 0.5),
-      2.5em 0em 0 0em rgba(255, 255, 255, 0.7), 1.75em 1.75em 0 0em #ffffff,
+      2.5em 0em 0 0em rgba(255, 255, 255, 0.7),
+      1.75em 1.75em 0 0em #ffffff,
       0em 2.5em 0 0em rgba(255, 255, 255, 0.2),
       -1.8em 1.8em 0 0em rgba(255, 255, 255, 0.2),
       -2.6em 0em 0 0em rgba(255, 255, 255, 0.2),
       -1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2);
   }
   50% {
-    box-shadow: 0em -2.6em 0em 0em rgba(255, 255, 255, 0.2),
+    box-shadow:
+      0em -2.6em 0em 0em rgba(255, 255, 255, 0.2),
       1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2),
       2.5em 0em 0 0em rgba(255, 255, 255, 0.5),
-      1.75em 1.75em 0 0em rgba(255, 255, 255, 0.7), 0em 2.5em 0 0em #ffffff,
+      1.75em 1.75em 0 0em rgba(255, 255, 255, 0.7),
+      0em 2.5em 0 0em #ffffff,
       -1.8em 1.8em 0 0em rgba(255, 255, 255, 0.2),
       -2.6em 0em 0 0em rgba(255, 255, 255, 0.2),
       -1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2);
   }
   62.5% {
-    box-shadow: 0em -2.6em 0em 0em rgba(255, 255, 255, 0.2),
+    box-shadow:
+      0em -2.6em 0em 0em rgba(255, 255, 255, 0.2),
       1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2),
       2.5em 0em 0 0em rgba(255, 255, 255, 0.2),
       1.75em 1.75em 0 0em rgba(255, 255, 255, 0.5),
-      0em 2.5em 0 0em rgba(255, 255, 255, 0.7), -1.8em 1.8em 0 0em #ffffff,
+      0em 2.5em 0 0em rgba(255, 255, 255, 0.7),
+      -1.8em 1.8em 0 0em #ffffff,
       -2.6em 0em 0 0em rgba(255, 255, 255, 0.2),
       -1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2);
   }
   75% {
-    box-shadow: 0em -2.6em 0em 0em rgba(255, 255, 255, 0.2),
+    box-shadow:
+      0em -2.6em 0em 0em rgba(255, 255, 255, 0.2),
       1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2),
       2.5em 0em 0 0em rgba(255, 255, 255, 0.2),
       1.75em 1.75em 0 0em rgba(255, 255, 255, 0.2),
       0em 2.5em 0 0em rgba(255, 255, 255, 0.5),
-      -1.8em 1.8em 0 0em rgba(255, 255, 255, 0.7), -2.6em 0em 0 0em #ffffff,
+      -1.8em 1.8em 0 0em rgba(255, 255, 255, 0.7),
+      -2.6em 0em 0 0em #ffffff,
       -1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2);
   }
   87.5% {
-    box-shadow: 0em -2.6em 0em 0em rgba(255, 255, 255, 0.2),
+    box-shadow:
+      0em -2.6em 0em 0em rgba(255, 255, 255, 0.2),
       1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2),
       2.5em 0em 0 0em rgba(255, 255, 255, 0.2),
       1.75em 1.75em 0 0em rgba(255, 255, 255, 0.2),
       0em 2.5em 0 0em rgba(255, 255, 255, 0.2),
       -1.8em 1.8em 0 0em rgba(255, 255, 255, 0.5),
-      -2.6em 0em 0 0em rgba(255, 255, 255, 0.7), -1.8em -1.8em 0 0em #ffffff;
+      -2.6em 0em 0 0em rgba(255, 255, 255, 0.7),
+      -1.8em -1.8em 0 0em #ffffff;
   }
+}
+
+/* Theme Classes */
+.dark-mode {
+  background-color: #050816;
+  color: white;
+}
+
+.light-mode {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+/* Section background colors for light mode */
+.light-mode .bg-primary {
+  background-color: #f8fafc;
+}
+
+.light-mode .bg-tertiary {
+  background-color: #e2e8f0;
+}
+
+.light-mode .black-gradient {
+  background: #f1f5f9;
+}
+
+.light-mode .green-pink-gradient {
+  background: linear-gradient(90.13deg, #0ea5e9 1.9%, #8b5cf6 97.5%);
+}
+
+/* Hero section styles for light mode */
+.light-mode .heroHeadText,
+.light-mode .sectionHeadText {
+  color: #0f172a !important;
+}
+
+.light-mode .heroSubText {
+  color: #1e293b !important;
+  opacity: 0.9;
+}
+
+.light-mode .sectionSubText {
+  color: #334155 !important;
+}
+
+/* Work experience boxes for light mode */
+.light-mode .vertical-timeline-element-content {
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.light-mode .vertical-timeline-element-icon {
+  box-shadow:
+    0 0 0 4px #e2e8f0,
+    inset 0 2px 0 rgba(0, 0, 0, 0.08),
+    0 3px 0 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Project card styles for light mode */
+.light-mode .project-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.1);
+}
+
+.light-mode .card-img_hover {
+  background-color: #f8fafc;
+}
+
+/* Contact section styles for light mode */
+.light-mode .bg-tertiary.rounded-2xl {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.1);
+}
+
+.light-mode .form input,
+.light-mode .form textarea {
+  background-color: #f1f5f9;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+}
+
+.light-mode .form input::placeholder,
+.light-mode .form textarea::placeholder {
+  color: #64748b;
+}
+
+/* Ensure gradient text is still visible in light mode */
+.light-mode .blue-text-gradient,
+.light-mode .green-text-gradient,
+.light-mode .pink-text-gradient,
+.light-mode .orange-text-gradient {
+  background: initial;
+  -webkit-background-clip: initial;
+  -webkit-text-fill-color: initial;
+}
+
+.light-mode .blue-text-gradient {
+  color: #2563eb;
+}
+
+.light-mode .green-text-gradient {
+  color: #059669;
+}
+
+.light-mode .pink-text-gradient {
+  color: #db2777;
+}
+
+.light-mode .orange-text-gradient {
+  color: #ea580c;
+}
+
+/* Text colors for light mode */
+.light-mode .text-secondary {
+  color: #64748b;
+}
+
+.light-mode .text-white {
+  color: #0f172a;
+}
+
+/* Card styles for light mode */
+.light-mode .black-gradient {
+  background: #f1f5f9;
+  box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.1);
+}
+
+/* Toggle Switch Styles */
+.toggle-checkbox {
+  transition: transform 0.3s;
+}
+
+.toggle-checkbox:checked {
+  transform: translateX(1rem);
+  border-color: #2dd4bf;
+}
+
+.toggle-label {
+  transition: background-color 0.3s;
+}
+
+.toggle-checkbox:checked + .toggle-label {
+  background-color: #2dd4bf;
+}
+
+input[type="checkbox"].toggle-checkbox {
+  z-index: 10;
+}
+
+/* Earth canvas styling */
+.earth-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.earth-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  outline: none;
+}
+
+/* Make sure Earth canvas is visible in light mode */
+.light-mode canvas {
+  background-color: transparent !important;
+}
+
+.light-mode .earth-container {
+  background: linear-gradient(to bottom, #e0f2fe, #ffffff);
+}
+
+/* Contact and Earth section spacing */
+.contact-section {
+  padding-bottom: 100px;
+  margin-bottom: 40px;
+}
+
+/* Contact section specific styles */
+.light-mode .contact-card {
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  position: relative;
+}
+
+.dark-mode .contact-card {
+  background-color: #1d1836;
+  border: 1px solid #2a2558;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+  position: relative;
+}
+
+/* Experience divider styling */
+.vertical-timeline-element-content ul div {
+  margin-left: -20px !important;
+  width: calc(100% + 20px) !important;
+  list-style: none !important;
+  padding: 0 !important;
 }
