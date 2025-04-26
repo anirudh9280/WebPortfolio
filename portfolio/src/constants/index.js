@@ -355,6 +355,75 @@ const projects = [
     deploy_code_link: "https://github.com/anirudh9280/Number-Classifier-",
     source_code_link: "https://github.com/anirudh9280/Number-Classifier-",
   },
+  {
+    name: "AI Chat Application",
+    description:
+      "A real-time AI chat application that uses GPT-4 to provide intelligent responses to user queries. Features include conversation history, prompt templates, and custom knowledge base integration.",
+    tags: [
+      {
+        name: "react",
+        color: "blue-text-gradient",
+      },
+      {
+        name: "openai",
+        color: "green-text-gradient",
+      },
+      {
+        name: "firebase",
+        color: "pink-text-gradient",
+      },
+    ],
+    image: ecommerce, // Reusing image as placeholder
+    deploy_code_link: "https://github.com/",
+    source_code_link: "https://github.com/",
+    display: false, // This project won't be displayed yet
+  },
+  {
+    name: "Data Visualization Dashboard",
+    description:
+      "Interactive dashboard for visualizing complex datasets with customizable charts, filters, and real-time updates. Built with D3.js and React, featuring responsive design and export capabilities.",
+    tags: [
+      {
+        name: "d3.js",
+        color: "orange-text-gradient",
+      },
+      {
+        name: "react",
+        color: "blue-text-gradient",
+      },
+      {
+        name: "typescript",
+        color: "green-text-gradient",
+      },
+    ],
+    image: imagerender, // Reusing image as placeholder
+    deploy_code_link: "https://github.com/",
+    source_code_link: "https://github.com/",
+    display: false, // This project won't be displayed yet
+  },
+  {
+    name: "Machine Learning Pipeline",
+    description:
+      "End-to-end ML pipeline for data preprocessing, model training, and deployment. Includes automated feature selection, hyperparameter tuning, and model versioning with performance metrics tracking.",
+    tags: [
+      {
+        name: "python",
+        color: "blue-text-gradient",
+      },
+      {
+        name: "scikit-learn",
+        color: "green-text-gradient",
+      },
+      {
+        name: "mlflow",
+        color: "pink-text-gradient",
+      },
+    ],
+    image: blackscholes, // Reusing image as placeholder
+    deploy_code_link: "https://github.com/",
+    source_code_link: "https://github.com/",
+    display: false, // This project won't be displayed yet
+  },
 ];
 
 export { services, technologies, experiences, testimonials, projects };
