@@ -1,4 +1,4 @@
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {
   About,
   Contact,
@@ -9,10 +9,12 @@ import {
   Tech,
   Works,
   StarsCanvas,
+  Footer,
+  Analytics,
 } from "./components";
 import { ThemeProvider, useTheme } from "./context/ThemeContext";
 
-function AppContent() {
+function HomePage() {
   const { darkMode } = useTheme();
 
   return (
@@ -32,6 +34,7 @@ function AppContent() {
         <Contact />
         <StarsCanvas />
       </div>
+      <Footer />
     </div>
   );
 }
@@ -40,7 +43,10 @@ function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
-        <AppContent />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/analytics" element={<Analytics />} />
+        </Routes>
       </BrowserRouter>
     </ThemeProvider>
   );

@@ -51,7 +51,22 @@ const ExperienceCard = ({ experience }) => {
           className={`${darkMode ? "text-secondary" : "text-gray-600"} text-[16px] font-semibold`}
           style={{ margin: 0 }}
         >
-          {experience.company_name}
+          {experience.website ? (
+            <a
+              href={experience.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${
+                darkMode
+                  ? "text-blue-400 hover:text-blue-300"
+                  : "text-blue-600 hover:text-blue-800"
+              } hover:underline transition-colors duration-200`}
+            >
+              {experience.company_name}
+            </a>
+          ) : (
+            experience.company_name
+          )}
         </p>
       </div>
       <ul className="mt-5 list-disc ml-5 space-y-2">

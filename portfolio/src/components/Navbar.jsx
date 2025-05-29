@@ -1,164 +1,285 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { styles } from "../styles";
+import { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { navLinks } from "../constants";
-import { logo, menu, close } from "../assets";
+import { logo } from "../assets";
 import { useTheme } from "../context/ThemeContext";
 
 const Navbar = () => {
   const [active, setActive] = useState("");
   const [toggle, setToggle] = useState(false);
   const { darkMode, toggleTheme } = useTheme();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const navItemClass = (isActive) => `
-    ${
-      isActive
-        ? darkMode
-          ? "text-white"
-          : "text-gray-900"
-        : darkMode
-          ? "text-secondary"
-          : "text-gray-600"
+  // Handle scroll-based active section detection (only on home page)
+  useEffect(() => {
+    if (location.pathname === "/") {
+      const handleScroll = () => {
+        const sections = navLinks.map((link) => link.id);
+        const scrollPosition = window.scrollY;
+        const viewportHeight = window.innerHeight;
+        const scrollCenter = scrollPosition + viewportHeight / 2;
+
+        let currentSection = "";
+        let maxOverlap = 0;
+
+        // Check each section to see which one has the most overlap with viewport
+        sections.forEach((sectionId) => {
+          const section = document.getElementById(sectionId);
+          if (section) {
+            const rect = section.getBoundingClientRect();
+            const sectionTop = scrollPosition + rect.top;
+            const sectionBottom = sectionTop + rect.height;
+
+            // Calculate overlap with viewport
+            const overlapTop = Math.max(scrollPosition, sectionTop);
+            const overlapBottom = Math.min(
+              scrollPosition + viewportHeight,
+              sectionBottom
+            );
+            const overlap = Math.max(0, overlapBottom - overlapTop);
+
+            // If this section has more overlap than current best, use it
+            if (overlap > maxOverlap) {
+              maxOverlap = overlap;
+              currentSection = sectionId;
+            }
+          }
+        });
+
+        // Fallback logic for edge cases
+        if (!currentSection || maxOverlap < 100) {
+          if (scrollPosition < 300) {
+            currentSection = "about";
+          } else {
+            // Check if we're near the bottom
+            const docHeight = document.documentElement.scrollHeight;
+            if (scrollPosition + viewportHeight >= docHeight - 200) {
+              currentSection = "contact";
+            } else {
+              // Use the section whose top is closest to the scroll center
+              let closestDistance = Infinity;
+              sections.forEach((sectionId) => {
+                const section = document.getElementById(sectionId);
+                if (section) {
+                  const rect = section.getBoundingClientRect();
+                  const sectionTop = scrollPosition + rect.top;
+                  const distance = Math.abs(sectionTop - scrollCenter);
+
+                  if (distance < closestDistance) {
+                    closestDistance = distance;
+                    currentSection = sectionId;
+                  }
+                }
+              });
+            }
+          }
+        }
+
+        if (currentSection && currentSection !== active) {
+          setActive(currentSection);
+        }
+      };
+
+      // Add a small delay to ensure sections are rendered
+      const timeoutId = setTimeout(() => {
+        window.addEventListener("scroll", handleScroll);
+        handleScroll(); // Set initial active section
+      }, 100);
+
+      return () => {
+        clearTimeout(timeoutId);
+        window.removeEventListener("scroll", handleScroll);
+      };
+    } else {
+      setActive(""); // Clear active state on other pages
     }
-    text-[18px] font-medium cursor-pointer
-    transition-colors duration-300
-    ${darkMode ? "text-teal-300 hover:text-white" : "text-teal-600 hover:text-teal-800"}
-  `;
+  }, [location.pathname, active]);
+
+  const handleNavClick = (linkId) => {
+    // Immediately set the active state for responsive UI
+    setActive(linkId);
+
+    if (location.pathname === "/") {
+      // If we're on the home page, just scroll to the section
+      const element = document.getElementById(linkId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      // If we're on another page, navigate to home then scroll to section
+      navigate(`/#${linkId}`);
+      // Wait longer for page to load and sections to render
+      setTimeout(() => {
+        const element = document.getElementById(linkId);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+          // Ensure the active state is maintained after navigation
+          setActive(linkId);
+        }
+      }, 300);
+    }
+  };
 
   return (
-    <div>
-      <nav
-        className={`${styles.paddingX}, w-full flex items-center py-5 fixed top-0 z-20 ${darkMode ? "bg-primary" : "bg-slate-200"}`}
-      >
-        <div className="w-full flex justify-between items-center max-w-7xl mx-auto">
-          <Link
-            to="/"
-            className="flex items-center gap-2"
-            onClick={() => {
-              setActive("");
-              window.scrollTo(0, 0);
-            }}
+    <nav
+      className={`w-full flex items-center py-4 fixed top-0 z-20 transition-all duration-300 ${
+        darkMode
+          ? "bg-primary/95 backdrop-blur-sm"
+          : "bg-white/95 backdrop-blur-sm"
+      } border-b ${darkMode ? "border-gray-800" : "border-gray-200"}`}
+    >
+      <div className="w-full flex justify-between items-center max-w-7xl mx-auto px-6">
+        {/* Logo */}
+        <Link
+          to="/"
+          className="flex items-center gap-2"
+          onClick={() => {
+            setActive("");
+            window.scrollTo(0, 0);
+          }}
+        >
+          <img src={logo} alt="logo" className="w-8 h-8 object-contain" />
+          <p
+            className={`${
+              darkMode ? "text-white" : "text-gray-900"
+            } text-lg font-bold cursor-pointer`}
           >
-            <img src={logo} alt="logo" className="w-9 h-9 object-contain" />
-            <p
-              className={`${darkMode ? "text-white" : "text-gray-900"} text-[18px] font-bold cursor-pointer flex`}
-            >
-              Anirudh &nbsp;<span className="">Annabathula</span>
-            </p>
-          </Link>
-          <ul className="list-none hidden sm:flex flex-row gap-10">
+            Anirudh Annabathula
+          </p>
+        </Link>
+
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-8">
+          <ul className="flex items-center gap-8">
             {navLinks.map((link) => (
-              <li
-                key={link.id}
-                className={navItemClass(active === link.title)}
-                onClick={() => setActive(link.title)}
-              >
-                <a href={`#${link.id}`}>{link.title}</a>
+              <li key={link.id} className="relative">
+                <button
+                  onClick={() => handleNavClick(link.id)}
+                  className={`relative px-1 py-2 text-sm font-medium transition-colors duration-300 ${
+                    active === link.id
+                      ? darkMode
+                        ? "text-white"
+                        : "text-gray-900"
+                      : darkMode
+                        ? "text-gray-300 hover:text-white"
+                        : "text-gray-600 hover:text-gray-900"
+                  }`}
+                >
+                  {link.title}
+                  {/* Animated underline */}
+                  <span
+                    className={`absolute bottom-0 left-0 h-0.5 bg-teal-500 transition-all duration-300 ease-out ${
+                      active === link.id ? "w-full" : "w-0"
+                    }`}
+                  />
+                  {/* Hover underline */}
+                  <span
+                    className={`absolute bottom-0 left-0 h-0.5 bg-teal-400 transition-all duration-300 ease-out opacity-0 hover:opacity-100 ${
+                      active === link.id ? "w-0" : "hover:w-full"
+                    }`}
+                  />
+                </button>
               </li>
             ))}
-            <li className={navItemClass(false)}>
-              <a
-                href="https://www.linkedin.com/in/anirudha9/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-current hover:after:w-full after:transition-all after:duration-300"
-              >
-                LinkedIn
-              </a>
-            </li>
-            <li className={navItemClass(false)}>
-              <a
-                href="https://github.com/anirudh9280"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-current hover:after:w-full after:transition-all after:duration-300"
-              >
-                Github
-              </a>
-            </li>
-            <li className="flex items-center ml-4">
-              <div className="relative inline-block w-10 mr-2 align-middle select-none">
-                <input
-                  type="checkbox"
-                  name="toggle"
-                  id="theme-toggle"
-                  checked={!darkMode}
-                  onChange={toggleTheme}
-                  className="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer transition-transform duration-300 ease-in-out"
-                />
-                <label
-                  htmlFor="theme-toggle"
-                  className={`toggle-label block overflow-hidden h-6 rounded-full cursor-pointer ${darkMode ? "bg-gray-600" : "bg-teal-400"}`}
-                ></label>
-              </div>
-              <span
-                className={`text-sm font-medium ${darkMode ? "text-white" : "text-gray-900"}`}
-              >
-                {darkMode ? "🌙" : "☀️"}
-              </span>
-            </li>
           </ul>
-          <div className="sm:hidden flex flex-1 justify-end items-center">
-            <div className="mr-4">
-              <div className="relative inline-block w-10 mr-2 align-middle select-none">
-                <input
-                  type="checkbox"
-                  name="toggle-mobile"
-                  id="theme-toggle-mobile"
-                  checked={!darkMode}
-                  onChange={toggleTheme}
-                  className="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer transition-transform duration-300 ease-in-out"
-                />
-                <label
-                  htmlFor="theme-toggle-mobile"
-                  className={`toggle-label block overflow-hidden h-6 rounded-full cursor-pointer ${darkMode ? "bg-gray-600" : "bg-teal-400"}`}
-                ></label>
-              </div>
-              <span
-                className={`text-sm font-medium ${darkMode ? "text-white" : "text-gray-900"}`}
-              >
-                {darkMode ? "🌙" : "☀️"}
-              </span>
-            </div>
-            <img
-              src={toggle ? close : menu}
-              alt="menu"
-              className="w-[28px] object-contain cursor-pointer"
-              onClick={() => setToggle(!toggle)}
-            />
-            <div
-              className={`${!toggle ? "hidden" : "flex"} p-6 ${darkMode ? "black-gradient" : "bg-slate-100"} absolute top-20 right-0 mx-4 my-2 min-w[140px] z-10 rounded-xl`}
+
+          {/* Theme Toggle */}
+          <div className="flex items-center">
+            <button
+              onClick={toggleTheme}
+              className={`p-2 rounded-lg transition-colors duration-300 ${
+                darkMode
+                  ? "text-gray-300 hover:text-white hover:bg-gray-800"
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+              }`}
             >
-              <ul className="list-none flex justify-end items-start flex-col gap-4">
-                {navLinks.map((link) => (
-                  <li
-                    key={link.id}
-                    className={`${
-                      active === link.title
-                        ? darkMode
-                          ? "text-white"
-                          : "text-gray-900"
-                        : darkMode
-                          ? "text-secondary"
-                          : "text-gray-600"
-                    } 
-                      font-poppins font-medium cursor-pointer text-[16px]
-                      transition-colors duration-300
-                      ${darkMode ? "hover:text-white" : "hover:text-teal-800"}`}
-                    onClick={() => {
-                      setToggle(!toggle);
-                      setActive(link.title);
-                    }}
-                  >
-                    <a href={`#${link.id}`}>{link.title}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+              {darkMode ? "🌙" : "☀️"}
+            </button>
           </div>
         </div>
-      </nav>
-    </div>
+
+        {/* Mobile Menu Button */}
+        <div className="md:hidden flex items-center gap-4">
+          {/* Mobile Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className={`p-2 rounded-lg transition-colors duration-300 ${
+              darkMode
+                ? "text-gray-300 hover:text-white"
+                : "text-gray-600 hover:text-gray-900"
+            }`}
+          >
+            {darkMode ? "🌙" : "☀️"}
+          </button>
+
+          {/* Hamburger Menu */}
+          <button
+            onClick={() => setToggle(!toggle)}
+            className={`p-2 rounded-lg transition-colors duration-300 ${
+              darkMode
+                ? "text-gray-300 hover:text-white"
+                : "text-gray-600 hover:text-gray-900"
+            }`}
+          >
+            <div className="w-6 h-6 flex flex-col justify-center items-center">
+              <span
+                className={`block h-0.5 w-6 bg-current transition-all duration-300 ${
+                  toggle ? "rotate-45 translate-y-1" : "-translate-y-1"
+                }`}
+              />
+              <span
+                className={`block h-0.5 w-6 bg-current transition-all duration-300 ${
+                  toggle ? "opacity-0" : "opacity-100"
+                }`}
+              />
+              <span
+                className={`block h-0.5 w-6 bg-current transition-all duration-300 ${
+                  toggle ? "-rotate-45 -translate-y-1" : "translate-y-1"
+                }`}
+              />
+            </div>
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      <div
+        className={`md:hidden absolute top-full left-0 w-full transition-all duration-300 ease-in-out ${
+          toggle
+            ? "opacity-100 translate-y-0 pointer-events-auto"
+            : "opacity-0 -translate-y-4 pointer-events-none"
+        } ${
+          darkMode
+            ? "bg-primary/95 border-gray-800"
+            : "bg-white/95 border-gray-200"
+        } border-b backdrop-blur-sm`}
+      >
+        <ul className="px-6 py-4 space-y-4">
+          {navLinks.map((link) => (
+            <li key={link.id}>
+              <button
+                onClick={() => {
+                  handleNavClick(link.id);
+                  setToggle(false);
+                }}
+                className={`block w-full text-left px-1 py-2 text-sm font-medium transition-colors duration-300 ${
+                  active === link.id
+                    ? darkMode
+                      ? "text-white"
+                      : "text-gray-900"
+                    : darkMode
+                      ? "text-gray-300 hover:text-white"
+                      : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                {link.title}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </nav>
   );
 };
 

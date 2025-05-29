@@ -39,6 +39,10 @@ import jobit from "./jobit.png";
 import tripguide from "./tripguide.png";
 import ucsdlogo from "./ucsdlogo.png";
 import hemut from "./hemut.png";
+import evgo from "./evgo.png";
+import analytics_icon from "./analytics_icon.png";
+import github_icon from "./github_icon.png";
+import linkedin_icon from "./linkedin_icon.png";
 
 export {
   tse,
@@ -69,6 +73,7 @@ export {
   reactjs,
   redux,
   tailwind,
+  evgo,
   typescript,
   threejs,
   meta,
@@ -80,4 +85,7 @@ export {
   tripguide,
   blackscholes,
   hemut,
+  analytics_icon,
+  github_icon,
+  linkedin_icon,
 };
