@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTheme } from "../context/ThemeContext";
 import * as d3 from "d3";
 
@@ -10,11 +10,64 @@ const CommitGraph = () => {
   const tooltipRef = useRef(null);
   const selectionCountRef = useRef(null);
   const languageBreakdownRef = useRef(null);
+  const filesContainerRef = useRef(null);
+  const scrollContainerRef = useRef(null);
+  const scrollStepsRef = useRef([]);
+
+  // State for timeline slider
+  const [commitProgress, setCommitProgress] = useState(100);
+  const [commitMaxTime, setCommitMaxTime] = useState(null);
+  const [filteredCommits, setFilteredCommits] = useState([]);
+  const [scrollMode, setScrollMode] = useState(false);
 
   // Global variables for scales
-  let xScale, yScale, rScale;
-  let dataRef = useRef(null);
-  let commitsRef = useRef(null);
+  const xScaleRef = useRef(null);
+  const yScaleRef = useRef(null);
+  const rScaleRef = useRef(null);
+  const dataRef = useRef(null);
+  const commitsRef = useRef(null);
+  const timeScaleRef = useRef(null);
+
+  // Handle timeline slider change
+  const handleTimeSliderChange = (value) => {
+    setCommitProgress(value);
+    if (timeScaleRef.current && commitsRef.current) {
+      const newMaxTime = timeScaleRef.current.invert(value);
+      setCommitMaxTime(newMaxTime);
+      const filtered = commitsRef.current.filter(
+        (d) => d.datetime <= newMaxTime
+      );
+      setFilteredCommits(filtered);
+    }
+  };
+
+  // Update tooltip content
+  const updateTooltip = (d) => {
+    if (!tooltipRef.current) return;
+
+    const commitElement = tooltipRef.current.querySelector("#commit-link");
+    const dateElement = tooltipRef.current.querySelector("#commit-date");
+    const timeElement = tooltipRef.current.querySelector("#commit-time");
+    const authorElement = tooltipRef.current.querySelector("#commit-author");
+    const linesElement = tooltipRef.current.querySelector("#commit-lines");
+
+    if (commitElement) {
+      commitElement.textContent = d.id.substring(0, 7);
+      commitElement.href = d.url;
+    }
+    if (dateElement) {
+      dateElement.textContent = d.datetime?.toLocaleString("en", {
+        dateStyle: "full",
+      });
+    }
+    if (timeElement) {
+      timeElement.textContent = d.datetime?.toLocaleString("en", {
+        timeStyle: "short",
+      });
+    }
+    if (authorElement) authorElement.textContent = d.author;
+    if (linesElement) linesElement.textContent = `${d.totalLines} changed`;
+  };
 
   useEffect(() => {
     const renderVisualization = async () => {
@@ -79,7 +132,7 @@ const CommitGraph = () => {
         };
 
         // Render commit information
-        const renderCommitInfo = (data, commits) => {
+        const renderCommitInfo = (data, filteredCommits) => {
           // Remove any existing content
           d3.select(statsRef.current).html("");
 
@@ -110,7 +163,7 @@ const CommitGraph = () => {
           addStat('Total <abbr title="Lines of code">LOC</abbr>', data.length);
 
           // Add total commits
-          addStat("Total Commits", commits.length);
+          addStat("Total Commits", filteredCommits.length);
 
           // Add number of files
           const fileCount = d3.group(data, (d) => d.file).size;
@@ -131,44 +184,13 @@ const CommitGraph = () => {
           addStat("Longest File", `${shortFileName} (${longestFile[1]} lines)`);
         };
 
-        // Update tooltip content
-        const updateTooltip = (d) => {
-          if (!tooltipRef.current) return;
-
-          const commitElement =
-            tooltipRef.current.querySelector("#commit-link");
-          const dateElement = tooltipRef.current.querySelector("#commit-date");
-          const timeElement = tooltipRef.current.querySelector("#commit-time");
-          const authorElement =
-            tooltipRef.current.querySelector("#commit-author");
-          const linesElement =
-            tooltipRef.current.querySelector("#commit-lines");
-
-          if (commitElement) {
-            commitElement.textContent = d.id.substring(0, 7);
-            commitElement.href = d.url;
-          }
-          if (dateElement) {
-            dateElement.textContent = d.datetime?.toLocaleString("en", {
-              dateStyle: "full",
-            });
-          }
-          if (timeElement) {
-            timeElement.textContent = d.datetime?.toLocaleString("en", {
-              timeStyle: "short",
-            });
-          }
-          if (authorElement) authorElement.textContent = d.author;
-          if (linesElement)
-            linesElement.textContent = `${d.totalLines} changed`;
-        };
-
         // Check if commit is within selection bounds
         const isCommitSelected = (selection, commit) => {
-          if (!selection || !xScale || !yScale) return false;
+          if (!selection || !xScaleRef.current || !yScaleRef.current)
+            return false;
 
-          const x = xScale(commit.datetime);
-          const y = yScale(commit.hourFrac);
+          const x = xScaleRef.current(commit.datetime);
+          const y = yScaleRef.current(commit.hourFrac);
 
           return (
             x >= selection[0][0] &&
@@ -307,8 +329,21 @@ const CommitGraph = () => {
         const commits = processCommits(data);
         commitsRef.current = commits;
 
+        // Create time scale for the slider
+        const [minDate, maxDate] = d3.extent(commits, (d) => d.datetime);
+        timeScaleRef.current = d3
+          .scaleTime()
+          .domain([minDate, maxDate])
+          .range([0, 100]);
+
+        // Initialize filtered commits and max time
+        if (!commitMaxTime) {
+          setCommitMaxTime(maxDate);
+          setFilteredCommits(commits);
+        }
+
         // Render basic stats
-        renderCommitInfo(data, commits);
+        renderCommitInfo(data, filteredCommits);
 
         // Set up visualization dimensions
         const margin = { top: 60, right: 120, bottom: 80, left: 80 };
@@ -333,20 +368,22 @@ const CommitGraph = () => {
           .attr("height", height);
 
         // Set up scales
-        const [minDate, maxDate] = d3.extent(commits, (d) => d.datetime);
-        xScale = d3
+        xScaleRef.current = d3
           .scaleTime()
           .domain([minDate, maxDate])
           .range([usableArea.left, usableArea.right])
           .nice();
 
-        yScale = d3
+        yScaleRef.current = d3
           .scaleLinear()
           .domain([0, 24])
           .range([usableArea.bottom, usableArea.top]);
 
         const [minLines, maxLines] = d3.extent(commits, (d) => d.totalLines);
-        rScale = d3.scaleSqrt().domain([minLines, maxLines]).range([3, 15]);
+        rScaleRef.current = d3
+          .scaleSqrt()
+          .domain([minLines, maxLines])
+          .range([3, 15]);
 
         // Create brush
         const brush = d3
@@ -368,15 +405,17 @@ const CommitGraph = () => {
 
         gridlines.call(
           d3
-            .axisLeft(yScale)
+            .axisLeft(yScaleRef.current)
             .tickFormat("")
             .tickSize(-usableArea.width)
             .tickValues(d3.range(0, 25, 4)) // Every 4 hours
         );
 
         // Add axes
-        const xAxis = d3.axisBottom(xScale).tickFormat(d3.timeFormat("%b %d"));
-        const yAxis = d3.axisLeft(yScale).tickFormat((d) => {
+        const xAxis = d3
+          .axisBottom(xScaleRef.current)
+          .tickFormat(d3.timeFormat("%b %d"));
+        const yAxis = d3.axisLeft(yScaleRef.current).tickFormat((d) => {
           if (d === 0) return "12 AM";
           if (d === 12) return "12 PM";
           if (d < 12) return `${d} AM`;
@@ -386,6 +425,7 @@ const CommitGraph = () => {
         // Add X axis
         svg
           .append("g")
+          .attr("class", "x-axis")
           .attr("transform", `translate(0, ${usableArea.bottom})`)
           .call(xAxis)
           .append("text")
@@ -398,6 +438,7 @@ const CommitGraph = () => {
         // Add Y axis
         svg
           .append("g")
+          .attr("class", "y-axis")
           .attr("transform", `translate(${usableArea.left}, 0)`)
           .call(yAxis)
           .append("text")
@@ -409,18 +450,18 @@ const CommitGraph = () => {
           .text("Time of Day");
 
         // Sort commits by size for better visibility
-        const sortedCommits = d3.sort(commits, (d) => -d.totalLines);
+        const sortedCommits = d3.sort(filteredCommits, (d) => -d.totalLines);
 
         // Add circles for commits
         svg
           .selectAll(".commit-circle")
-          .data(sortedCommits)
+          .data(sortedCommits, (d) => d.id) // Add key function for stable transitions
           .enter()
           .append("circle")
           .attr("class", "commit-circle")
-          .attr("cx", (d) => xScale(d.datetime))
-          .attr("cy", (d) => yScale(d.hourFrac))
-          .attr("r", (d) => rScale(d.totalLines))
+          .attr("cx", (d) => xScaleRef.current(d.datetime))
+          .attr("cy", (d) => yScaleRef.current(d.hourFrac))
+          .attr("r", (d) => rScaleRef.current(d.totalLines))
           .attr("fill", darkMode ? "#ffffff" : "#374151") // Single color for all dots
           .style("fill-opacity", 0.7)
           .style("stroke", darkMode ? "#6b7280" : "#9ca3af")
@@ -570,6 +611,59 @@ const CommitGraph = () => {
         stroke: #ff6b6b;
         stroke-width: 2px;
       }
+
+      /* Timeline slider styling */
+      .commit-graph-container input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        height: 6px;
+        background: ${darkMode ? "#4b5563" : "#d1d5db"};
+        border-radius: 3px;
+        outline: none;
+        transition: opacity 0.2s;
+      }
+
+      .commit-graph-container input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        background: ${darkMode ? "#60a5fa" : "#3b82f6"};
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .commit-graph-container input[type="range"]::-webkit-slider-thumb:hover {
+        transform: scale(1.2);
+        box-shadow: 0 0 0 8px ${darkMode ? "rgba(96, 165, 250, 0.1)" : "rgba(59, 130, 246, 0.1)"};
+      }
+
+      .commit-graph-container input[type="range"]::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        background: ${darkMode ? "#60a5fa" : "#3b82f6"};
+        border-radius: 50%;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s ease;
+      }
+
+      .commit-graph-container input[type="range"]::-moz-range-thumb:hover {
+        transform: scale(1.2);
+        box-shadow: 0 0 0 8px ${darkMode ? "rgba(96, 165, 250, 0.1)" : "rgba(59, 130, 246, 0.1)"};
+      }
+
+      /* Entry animation for circles */
+      @starting-style {
+        .commit-circle {
+          r: 0;
+        }
+      }
+
+      .commit-circle {
+        transition: all 200ms, r calc(var(--r) * 50ms);
+      }
     `;
     document.head.appendChild(newStyle);
 
@@ -579,6 +673,248 @@ const CommitGraph = () => {
       }
     };
   }, [darkMode]);
+
+  // Update visualization when filtered commits change
+  useEffect(() => {
+    if (filteredCommits.length === 0 || !dataRef.current || !xScaleRef.current)
+      return;
+
+    // Update stats
+    const renderCommitInfo = (data, filteredCommits) => {
+      d3.select(statsRef.current).html("");
+
+      const container = d3
+        .select(statsRef.current)
+        .append("div")
+        .attr("class", "flex flex-wrap justify-around gap-4");
+
+      const addStat = (title, value) => {
+        const statBlock = container
+          .append("div")
+          .attr("class", "stat-block text-center");
+
+        statBlock
+          .append("div")
+          .attr("class", "stat-title text-sm opacity-75")
+          .html(title);
+
+        statBlock
+          .append("div")
+          .attr("class", "stat-value text-2xl font-bold")
+          .text(value);
+      };
+
+      addStat('Total <abbr title="Lines of code">LOC</abbr>', data.length);
+      addStat("Total Commits", filteredCommits.length);
+
+      const fileCount = d3.group(data, (d) => d.file).size;
+      addStat("Number of Files", fileCount);
+
+      const fileLengths = d3.rollups(
+        data,
+        (v) => d3.max(v, (d) => d.line),
+        (d) => d.file
+      );
+      const avgFileLength = Math.round(d3.mean(fileLengths, (d) => d[1]));
+      addStat("Avg. File Length", avgFileLength + " lines");
+
+      const longestFile = d3.greatest(fileLengths, (d) => d[1]);
+      const shortFileName = longestFile[0].split("/").pop();
+      addStat("Longest File", `${shortFileName} (${longestFile[1]} lines)`);
+    };
+
+    renderCommitInfo(dataRef.current, filteredCommits);
+
+    // Update scatter plot
+    const svg = d3.select(chartRef.current).select("svg");
+    if (!svg.node()) return;
+
+    // Update x-axis domain
+    const [minDate, maxDate] = d3.extent(filteredCommits, (d) => d.datetime);
+    xScaleRef.current.domain([minDate, maxDate]);
+
+    // Update x-axis
+    const xAxis = d3
+      .axisBottom(xScaleRef.current)
+      .tickFormat(d3.timeFormat("%b %d"));
+    svg.select(".x-axis").transition().duration(500).call(xAxis);
+
+    // Update radius scale
+    const [minLines, maxLines] = d3.extent(
+      filteredCommits,
+      (d) => d.totalLines
+    );
+    const rScale = d3.scaleSqrt().domain([minLines, maxLines]).range([3, 15]);
+
+    // Sort commits by size
+    const sortedCommits = d3.sort(filteredCommits, (d) => -d.totalLines);
+
+    // Update circles with transitions
+    svg
+      .selectAll(".commit-circle")
+      .data(sortedCommits, (d) => d.id)
+      .join(
+        (enter) =>
+          enter
+            .append("circle")
+            .attr("class", "commit-circle")
+            .attr("cx", (d) => xScaleRef.current(d.datetime))
+            .attr("cy", (d) => yScaleRef.current(d.hourFrac))
+            .attr("r", 0)
+            .attr("fill", darkMode ? "#ffffff" : "#374151")
+            .style("fill-opacity", 0.7)
+            .style("stroke", darkMode ? "#6b7280" : "#9ca3af")
+            .style("stroke-width", 1)
+            .style("cursor", "pointer")
+            .call((enter) =>
+              enter
+                .transition()
+                .duration(500)
+                .attr("r", (d) => rScale(d.totalLines))
+            ),
+        (update) =>
+          update
+            .transition()
+            .duration(500)
+            .attr("cx", (d) => xScaleRef.current(d.datetime))
+            .attr("r", (d) => rScale(d.totalLines)),
+        (exit) => exit.transition().duration(500).attr("r", 0).remove()
+      )
+      .on("mouseover", function (event, d) {
+        if (tooltipRef.current) {
+          updateTooltip(d);
+          tooltipRef.current.hidden = false;
+          const tooltip = d3.select(tooltipRef.current);
+          tooltip
+            .style("left", event.pageX + 10 + "px")
+            .style("top", event.pageY - 10 + "px");
+        }
+        d3.select(this).style("fill-opacity", 1).style("stroke-width", 2);
+      })
+      .on("mousemove", function (event) {
+        if (tooltipRef.current) {
+          const tooltip = d3.select(tooltipRef.current);
+          tooltip
+            .style("left", event.pageX + 10 + "px")
+            .style("top", event.pageY - 10 + "px");
+        }
+      })
+      .on("mouseout", function () {
+        if (tooltipRef.current) {
+          tooltipRef.current.hidden = true;
+        }
+        if (!d3.select(this).classed("selected")) {
+          d3.select(this).style("fill-opacity", 0.7).style("stroke-width", 1);
+        }
+      })
+      .on("click", function (event, d) {
+        window.open(d.url, "_blank");
+      });
+
+    // Ensure dots are above brush
+    svg.selectAll(".commit-circle").raise();
+
+    // Update file visualization
+    if (filesContainerRef.current) {
+      const lines = filteredCommits.flatMap((d) => d.lines);
+      const files = d3
+        .groups(lines, (d) => d.file)
+        .map(([name, lines]) => ({ name, lines }))
+        .sort((a, b) => b.lines.length - a.lines.length);
+
+      // Create ordinal color scale for file types
+      const colors = d3.scaleOrdinal(d3.schemeTableau10);
+
+      // Update file display
+      const filesContainer = d3
+        .select(filesContainerRef.current)
+        .selectAll("div.file-item")
+        .data(files, (d) => d.name)
+        .join(
+          (enter) =>
+            enter
+              .append("div")
+              .attr("class", "file-item grid grid-cols-[1fr,3fr] gap-4 mb-4")
+              .call((div) => {
+                div
+                  .append("div")
+                  .attr("class", "file-info")
+                  .call((info) => {
+                    info
+                      .append("code")
+                      .attr("class", "block text-sm font-mono break-all");
+                    info
+                      .append("small")
+                      .attr("class", "block text-xs opacity-60 mt-1");
+                  });
+                div
+                  .append("div")
+                  .attr(
+                    "class",
+                    "file-lines flex flex-wrap gap-[0.15em] items-start"
+                  );
+              }),
+          (update) => update,
+          (exit) => exit.remove()
+        );
+
+      // Update file names and line counts
+      filesContainer.select(".file-info code").text((d) => d.name);
+      filesContainer
+        .select(".file-info small")
+        .text((d) => `${d.lines.length} lines`);
+
+      // Update dots for each line
+      filesContainer.each(function (fileData) {
+        d3.select(this)
+          .select(".file-lines")
+          .selectAll("div.loc")
+          .data(fileData.lines)
+          .join("div")
+          .attr("class", "loc")
+          .style("width", "0.5em")
+          .style("height", "0.5em")
+          .style("background", (d) => colors(d.type || "unknown"))
+          .style("border-radius", "50%");
+      });
+    }
+  }, [filteredCommits, darkMode]);
+
+  // Set up scrollytelling with Intersection Observer
+  useEffect(() => {
+    if (!scrollMode || !commitsRef.current || !timeScaleRef.current) return;
+
+    const observerOptions = {
+      root: null,
+      rootMargin: "-50% 0px",
+      threshold: 0,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const commitData = entry.target.__commitData;
+          if (commitData) {
+            // Update progress based on the commit's datetime
+            const progress = timeScaleRef.current(commitData.datetime);
+            setCommitProgress(progress);
+            handleTimeSliderChange(progress);
+          }
+        }
+      });
+    }, observerOptions);
+
+    // Observe all scroll steps
+    scrollStepsRef.current.forEach((step) => {
+      if (step) observer.observe(step);
+    });
+
+    return () => {
+      scrollStepsRef.current.forEach((step) => {
+        if (step) observer.unobserve(step);
+      });
+    };
+  }, [scrollMode, commitsRef.current]);
 
   return (
     <div
@@ -594,6 +930,36 @@ const CommitGraph = () => {
         <p className="text-center text-lg mb-8">
           Tracking commits and development patterns for this personal portfolio
         </p>
+
+        {/* Timeline slider */}
+        {commitMaxTime && (
+          <div
+            className={`p-4 rounded-lg mb-4 flex items-baseline gap-4 ${
+              darkMode
+                ? "bg-gray-800/80 border border-gray-700"
+                : "bg-white/80 border border-gray-200"
+            }`}
+          >
+            <label className="flex-1 flex items-baseline gap-4">
+              <span>Show commits until:</span>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={commitProgress}
+                onChange={(e) => handleTimeSliderChange(e.target.value)}
+                className="flex-1"
+                id="commit-progress"
+              />
+              <time className="ml-auto font-mono">
+                {commitMaxTime.toLocaleString("en", {
+                  dateStyle: "long",
+                  timeStyle: "short",
+                })}
+              </time>
+            </label>
+          </div>
+        )}
 
         {/* Stats bar - horizontal instead of vertical */}
         <div
@@ -641,6 +1007,176 @@ const CommitGraph = () => {
             </p>
             <dl ref={languageBreakdownRef} className="stats mt-2"></dl>
           </div>
+        </div>
+
+        {/* File visualization section */}
+        {filteredCommits.length > 0 && (
+          <div
+            className={`p-6 rounded-lg mt-8 ${
+              darkMode
+                ? "bg-gray-800/80 border border-gray-700"
+                : "bg-white/80 border border-gray-200"
+            }`}
+          >
+            <h3 className="text-xl font-semibold mb-4">
+              The Race for the Biggest File!
+            </h3>
+            <p className="mb-6 opacity-75">
+              File sizes over time, colored by technology. Each dot represents
+              one line of code.
+            </p>
+            <div
+              ref={filesContainerRef}
+              className="max-h-96 overflow-y-auto"
+            ></div>
+          </div>
+        )}
+
+        {/* Scrollytelling section */}
+        <div className="mt-8">
+          <div className="text-center mb-6">
+            <button
+              onClick={() => setScrollMode(!scrollMode)}
+              className={`px-6 py-3 rounded-lg font-medium transition-all ${
+                darkMode
+                  ? "bg-blue-600 hover:bg-blue-700 text-white"
+                  : "bg-blue-500 hover:bg-blue-600 text-white"
+              }`}
+            >
+              {scrollMode ? "Exit Story Mode" : "Enter Story Mode"}
+            </button>
+            {scrollMode && (
+              <p className="mt-2 text-sm opacity-75">
+                Scroll down to see how the repository evolved over time
+              </p>
+            )}
+          </div>
+
+          {scrollMode && (
+            <div className="relative flex gap-8 mt-12" ref={scrollContainerRef}>
+              {/* Story content on the left */}
+              <div className="flex-1 space-y-[50vh]">
+                {commitsRef.current &&
+                  commitsRef.current.map((commit, i) => (
+                    <div
+                      key={commit.id}
+                      ref={(el) => {
+                        scrollStepsRef.current[i] = el;
+                        if (el) el.__commitData = commit;
+                      }}
+                      className={`p-6 rounded-lg ${
+                        darkMode
+                          ? "bg-gray-800/80 border border-gray-700"
+                          : "bg-white/80 border border-gray-200"
+                      }`}
+                    >
+                      <p className="text-lg">
+                        On{" "}
+                        <time className="font-medium">
+                          {commit.datetime.toLocaleString("en", {
+                            dateStyle: "full",
+                            timeStyle: "short",
+                          })}
+                        </time>
+                        , I made{" "}
+                        <a
+                          href={commit.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className={`underline ${
+                            darkMode ? "text-blue-400" : "text-blue-600"
+                          }`}
+                        >
+                          {i > 0
+                            ? "another glorious commit"
+                            : "my first commit, and it was glorious"}
+                        </a>
+                        . I edited{" "}
+                        <span className="font-bold">
+                          {commit.totalLines} lines
+                        </span>{" "}
+                        across{" "}
+                        <span className="font-bold">
+                          {
+                            d3.rollups(
+                              commit.lines,
+                              (D) => D.length,
+                              (d) => d.file
+                            ).length
+                          }{" "}
+                          files
+                        </span>
+                        . Then I looked over all I had made, and I saw that it
+                        was very good.
+                      </p>
+                    </div>
+                  ))}
+              </div>
+
+              {/* Fixed visualization on the right */}
+              <div className="flex-1 sticky top-20 h-[80vh]">
+                <div
+                  className={`h-full p-4 rounded-lg overflow-hidden ${
+                    darkMode
+                      ? "bg-gray-800/80 border border-gray-700"
+                      : "bg-white/80 border border-gray-200"
+                  }`}
+                >
+                  <h4 className="text-lg font-medium mb-2">
+                    Repository at this point:
+                  </h4>
+                  <div className="text-sm opacity-75 mb-4">
+                    {filteredCommits.length} commits •{" "}
+                    {filteredCommits.flatMap((c) => c.lines).length} lines
+                    changed
+                  </div>
+
+                  {/* File visualization */}
+                  <div className="overflow-y-auto h-[calc(100%-5rem)]">
+                    {(() => {
+                      const lines = filteredCommits.flatMap((d) => d.lines);
+                      const files = d3
+                        .groups(lines, (d) => d.file)
+                        .map(([name, lines]) => ({ name, lines }))
+                        .sort((a, b) => b.lines.length - a.lines.length);
+
+                      const colors = d3.scaleOrdinal(d3.schemeTableau10);
+
+                      return files.map((file) => (
+                        <div
+                          key={file.name}
+                          className="grid grid-cols-[1fr,3fr] gap-4 mb-4"
+                        >
+                          <div className="file-info">
+                            <code className="block text-xs font-mono break-all">
+                              {file.name}
+                            </code>
+                            <small className="block text-xs opacity-60 mt-1">
+                              {file.lines.length} lines
+                            </small>
+                          </div>
+                          <div className="file-lines flex flex-wrap gap-[0.15em] items-start">
+                            {file.lines.map((line, i) => (
+                              <div
+                                key={`${file.name}-${i}`}
+                                className="loc"
+                                style={{
+                                  width: "0.5em",
+                                  height: "0.5em",
+                                  background: colors(line.type || "unknown"),
+                                  borderRadius: "50%",
+                                }}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      ));
+                    })()}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
