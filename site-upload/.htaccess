@@ -19,13 +19,6 @@
   RewriteRule . /index.html [L]
 </IfModule>
 
-# Hostinger serves .csv as text/plain, which meant the "never cache" rule below
-# did not match and the meta CSVs came back with no cache headers at all,
-# leaving them to heuristic browser caching. Declaring the type fixes both.
-<IfModule mod_mime.c>
-  AddType text/csv .csv
-</IfModule>
-
 # Hashed filenames are immutable, so cache them hard.
 <IfModule mod_expires.c>
   ExpiresActive On
