@@ -28,6 +28,7 @@ import evocharge from "./projects/evocharge.svg";
 import keysofparkinsons from "./projects/keysofparkinsons.svg";
 import cred from "./projects/cred.svg";
 import spayla from "./projects/spayla.svg";
+import ds3site from "./projects/ds3.svg";
 import van from "./projects/vanlife.svg";
 import ecommerce from "./projects/ecommerce.svg";
 
@@ -51,6 +52,7 @@ export {
   keysofparkinsons,
   cred,
   spayla,
+  ds3site,
   van,
   ecommerce,
 };

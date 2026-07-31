@@ -101,7 +101,7 @@ export const experiences = [
     points: [
       "Led 12+ data science projects and mentored teams on AI model optimization",
       "Matched project ideas with teams based on expertise, and organized showcases and workshops",
-      "Enhanced the DS3 website, improving user engagement and backend performance",
+      "Rebuilt the DS3 site landing page to be fully responsive on flex and rem, and added scroll-triggered count-up statistics",
       "Directed projects that shipped as TalentLens, ChainSense, Next Up and EvoCharge",
     ],
     links: [

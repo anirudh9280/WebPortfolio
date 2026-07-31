@@ -1,5 +1,6 @@
 import {
   chainsense,
+  ds3site,
   talentlens,
   nextup,
   evocharge,
@@ -90,6 +91,19 @@ export const projects = [
     image: spayla,
     source_code_link: "https://github.com/TritonSE/SpayLA-Website",
     deploy_code_link: "https://spay-la-website-three.vercel.app/",
+  },
+  {
+    name: "DS3 Website",
+    blurb: "Student org site for UC San Diego",
+    // Scoped to verified authorship: 5 commits on the SvelteKit landing page,
+    // all front-end. "Contributed to" is doing real work in this sentence.
+    description:
+      "Contributed to the site for the Data Science Student Society, UC San Diego's largest data science org. Rebuilt the landing page to be fully responsive on flex and rem instead of media queries, and added scroll-triggered count-up statistics that fire only once the section enters the viewport. The org has since moved to a React and Supabase rebuild, live at ds3atucsd.com.",
+    metric: "100+ member org · responsive landing-page rebuild",
+    tags: ["SvelteKit", "Svelte", "TypeScript", "CSS"],
+    image: ds3site,
+    source_code_link: "https://github.com/ucsdds3/ds3-site",
+    deploy_code_link: "https://www.ds3atucsd.com/",
   },
   {
     name: "Vanlife",

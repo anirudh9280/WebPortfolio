@@ -405,6 +405,36 @@ html {
   transform: scale(1.035);
 }
 
+/* Cover art drifts a few pixels against the card as it crosses the viewport.
+   Scroll-driven so it runs on the compositor thread; the hover scale above wins
+   while hovering because it is a later, more specific rule. Overscaled slightly
+   so the drift never exposes an edge. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    @keyframes cover-drift {
+      from {
+        transform: scale(1.08) translateY(-2.5%);
+      }
+      to {
+        transform: scale(1.08) translateY(2.5%);
+      }
+    }
+
+    .project-card__cover img {
+      /* animation-timeline must follow animation, or the shorthand resets it. */
+      animation: cover-drift linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+
+    /* Hover still takes over cleanly. */
+    .project-card:hover .project-card__cover img {
+      animation-play-state: paused;
+      transform: scale(1.08);
+    }
+  }
+}
+
 /* react-vertical-timeline overrides, driven by tokens instead of two
    hardcoded colour sets. */
 .vertical-timeline::before {
