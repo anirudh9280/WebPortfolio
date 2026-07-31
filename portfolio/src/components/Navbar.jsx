@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { navLinks } from "../constants";
+import { GITHUB_URL, LINKEDIN_URL, RESUME_URL } from "../constants/links";
 import { useTheme } from "../context/ThemeContext";
 import { useActiveSection, scrollToSection } from "../hooks/useActiveSection";
 
@@ -78,6 +79,17 @@ const Navbar = () => {
             ))}
           </ul>
 
+          {/* Highest-value link for a recruiter, so it stays reachable from
+              every scroll position rather than only from the hero. */}
+          <a
+            href={RESUME_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden rounded-chip border border-accent/40 px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-readout text-accent transition-colors hover:bg-accent hover:text-on-accent sm:inline-block"
+          >
+            Résumé
+          </a>
+
           <button
             type="button"
             onClick={toggleTheme}
@@ -123,6 +135,23 @@ const Navbar = () => {
                 >
                   {link.title}
                 </button>
+              </li>
+            ))}
+            {[
+              ["Résumé", RESUME_URL],
+              ["GitHub", GITHUB_URL],
+              ["LinkedIn", LINKEDIN_URL],
+            ].map(([label, href]) => (
+              <li key={label}>
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMenuOpen(false)}
+                  className="block border-b border-line/[0.06] py-4 font-mono text-[13px] uppercase tracking-readout text-accent"
+                >
+                  {label} ↗
+                </a>
               </li>
             ))}
           </ul>

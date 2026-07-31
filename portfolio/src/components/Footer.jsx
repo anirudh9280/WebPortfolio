@@ -1,9 +1,16 @@
 import { Link } from "react-router-dom";
+import {
+  EMAIL,
+  GITHUB_URL,
+  LINKEDIN_URL,
+  RESUME_URL,
+} from "../constants/links";
 
 const LINKS = [
-  { label: "GitHub", href: "https://github.com/anirudh9280" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/anirudha9" },
-  { label: "Email", href: "mailto:anirudh.annabathula@gmail.com" },
+  { label: "GitHub", href: GITHUB_URL },
+  { label: "LinkedIn", href: LINKEDIN_URL },
+  { label: "Résumé", href: RESUME_URL },
+  { label: "Email", href: `mailto:${EMAIL}` },
 ];
 
 const Footer = () => (
@@ -19,17 +26,21 @@ const Footer = () => (
       </div>
 
       <nav className="flex flex-wrap items-center gap-x-6 gap-y-3">
-        {LINKS.map((link) => (
-          <a
-            key={link.label}
-            href={link.href}
-            target={link.href.startsWith("http") ? "_blank" : undefined}
-            rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
-            className="font-mono text-[11px] uppercase tracking-readout text-muted transition-colors hover:text-accent"
-          >
-            {link.label} ↗
-          </a>
-        ))}
+        {LINKS.map((link) => {
+          const external =
+            link.href.startsWith("http") || link.href.endsWith(".pdf");
+          return (
+            <a
+              key={link.label}
+              href={link.href}
+              target={external ? "_blank" : undefined}
+              rel={external ? "noopener noreferrer" : undefined}
+              className="font-mono text-[11px] uppercase tracking-readout text-muted transition-colors hover:text-accent"
+            >
+              {link.label} ↗
+            </a>
+          );
+        })}
         <Link
           to="/analytics"
           className="font-mono text-[11px] uppercase tracking-readout text-muted transition-colors hover:text-accent"

@@ -5,6 +5,13 @@ import emailjs from "@emailjs/browser";
 import SectionHeader from "./SectionHeader";
 import { SectionWrapper } from "../hoc";
 import { fadeIn } from "../utils/motion";
+import {
+  EMAIL,
+  PHONE,
+  GITHUB_URL,
+  LINKEDIN_URL,
+  RESUME_URL,
+} from "../constants/links";
 
 const EMAILJS = {
   serviceId: "service_uneg1dg",
@@ -13,20 +20,30 @@ const EMAILJS = {
 };
 
 const CHANNELS = [
-  { label: "Email", value: "anirudh.annabathula@gmail.com", href: "mailto:anirudh.annabathula@gmail.com" },
-  { label: "GitHub", value: "anirudh9280", href: "https://github.com/anirudh9280" },
-  { label: "LinkedIn", value: "anirudha9", href: "https://www.linkedin.com/in/anirudha9" },
-  { label: "Phone", value: "408-838-9692", href: "tel:+14088389692" },
+  { label: "Email", value: EMAIL, href: `mailto:${EMAIL}` },
+  { label: "GitHub", value: "anirudh9280", href: GITHUB_URL },
+  { label: "LinkedIn", value: "anirudha9", href: LINKEDIN_URL },
+  { label: "Résumé", value: "PDF", href: RESUME_URL },
+  { label: "Phone", value: PHONE, href: `tel:+1${PHONE.replace(/-/g, "")}` },
 ];
 
 const inputClass =
   "w-full rounded-panel border border-line/15 bg-surface-2 px-4 py-3 text-[15px] text-ink placeholder:text-muted/60 outline-none transition-colors focus:border-accent";
 
+/** Everything the visitor typed, handed to their own mail client. */
+const buildMailto = ({ name, email, message }) => {
+  const subject = `Portfolio enquiry from ${name || "a visitor"}`;
+  const body = [message, "", `From: ${name}`, `Reply to: ${email}`]
+    .join("\n")
+    .trim();
+  return `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+};
+
 const Contact = () => {
   const formRef = useRef();
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [loading, setLoading] = useState(false);
-  // Inline status instead of alert() -- alerts block the main thread and read
+  // Inline status rather than alert(): alerts block the main thread and read
   // as broken on mobile.
   const [status, setStatus] = useState(null);
 
@@ -48,7 +65,7 @@ const Contact = () => {
           from_name: form.name,
           to_name: "Anirudh",
           from_email: form.email,
-          to_email: "anirudh.annabathula@gmail.com",
+          to_email: EMAIL,
           message: form.message,
         },
         EMAILJS.publicKey
@@ -61,10 +78,14 @@ const Contact = () => {
         },
         (error) => {
           setLoading(false);
-          console.error(error);
+          // Log the real reason. EmailJS returns e.g. 412 "Gmail_API: Invalid
+          // grant" when the mail service's OAuth token needs reconnecting --
+          // a dashboard problem, not something the visitor can act on.
+          console.error("EmailJS send failed:", error?.status, error?.text);
           setStatus({
             ok: false,
-            text: "That didn't send. Email me directly at anirudh.annabathula@gmail.com.",
+            text: "The form couldn't reach the mail service.",
+            mailto: buildMailto(form),
           });
         }
       );
@@ -133,15 +154,43 @@ const Contact = () => {
               {loading ? "Sending…" : "Send message"}
             </button>
 
-            {status ? (
-              <p
-                role="status"
-                className={`text-[13px] ${status.ok ? "text-accent" : "text-ink"}`}
-              >
+            {status?.ok ? (
+              <p role="status" className="text-[13px] text-accent">
                 {status.text}
               </p>
             ) : null}
           </div>
+
+          {/* A failed send must not be a dead end -- hand the typed message to
+              the visitor's own mail client, already filled in. */}
+          {status && !status.ok ? (
+            <div
+              role="alert"
+              className="rounded-panel border border-line/20 bg-surface-2 p-4"
+            >
+              <p className="text-[14px] leading-relaxed text-ink">
+                {status.text}
+              </p>
+              <p className="mt-1 text-[13px] leading-relaxed text-muted">
+                Nothing you wrote is lost. Open it in your mail app and hit
+                send, or copy the address below.
+              </p>
+              <div className="mt-3 flex flex-wrap items-center gap-3">
+                <a
+                  href={status.mailto}
+                  className="rounded-panel border border-accent px-4 py-2 font-mono text-[11px] uppercase tracking-readout text-accent transition-colors hover:bg-accent hover:text-on-accent"
+                >
+                  Open in mail app
+                </a>
+                <a
+                  href={`mailto:${EMAIL}`}
+                  className="font-mono text-[12px] text-muted underline decoration-line/30 underline-offset-4 transition-colors hover:text-accent"
+                >
+                  {EMAIL}
+                </a>
+              </div>
+            </div>
+          ) : null}
         </motion.form>
 
         <motion.div variants={fadeIn("left", "tween", 0.2, 0.7)}>
@@ -151,25 +200,26 @@ const Contact = () => {
           </div>
 
           <ul className="mt-4 divide-y divide-line/[0.08]">
-            {CHANNELS.map((channel) => (
-              <li key={channel.label}>
-                <a
-                  href={channel.href}
-                  target={channel.href.startsWith("http") ? "_blank" : undefined}
-                  rel={
-                    channel.href.startsWith("http")
-                      ? "noopener noreferrer"
-                      : undefined
-                  }
-                  className="group flex items-baseline justify-between gap-4 py-3 transition-colors hover:text-accent"
-                >
-                  <span className="readout shrink-0">{channel.label}</span>
-                  <span className="truncate font-mono text-[13px] text-ink transition-colors group-hover:text-accent">
-                    {channel.value}
-                  </span>
-                </a>
-              </li>
-            ))}
+            {CHANNELS.map((channel) => {
+              const external =
+                channel.href.startsWith("http") || channel.href.endsWith(".pdf");
+              return (
+                <li key={channel.label}>
+                  <a
+                    href={channel.href}
+                    target={external ? "_blank" : undefined}
+                    rel={external ? "noopener noreferrer" : undefined}
+                    className="group flex items-baseline justify-between gap-4 py-3 transition-colors hover:text-accent"
+                  >
+                    <span className="readout shrink-0">{channel.label}</span>
+                    <span className="truncate font-mono text-[13px] text-ink transition-colors group-hover:text-accent">
+                      {channel.value}
+                      {external ? " ↗" : ""}
+                    </span>
+                  </a>
+                </li>
+              );
+            })}
           </ul>
 
           <p className="mt-8 text-[14px] leading-[1.7] text-muted">

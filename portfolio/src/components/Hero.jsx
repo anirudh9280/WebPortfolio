@@ -3,6 +3,12 @@ import { motion } from "framer-motion";
 import { styles } from "../styles";
 import CommitScatter from "./CommitScatter";
 import { projectCount } from "../constants/projects";
+import {
+  EMAIL,
+  GITHUB_URL,
+  LINKEDIN_URL,
+  RESUME_URL,
+} from "../constants/links";
 
 const fmt = new Intl.NumberFormat("en-US");
 
@@ -50,11 +56,37 @@ const Hero = () => {
               Selected work
             </a>
             <a
+              href={RESUME_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-panel border border-line/25 px-5 py-2.5 font-mono text-[12px] font-medium uppercase tracking-readout text-ink transition-colors hover:border-accent hover:text-accent"
+            >
+              Résumé ↗
+            </a>
+            <a
               href="#contact"
               className="rounded-panel border border-line/25 px-5 py-2.5 font-mono text-[12px] font-medium uppercase tracking-readout text-ink transition-colors hover:border-accent hover:text-accent"
             >
               Get in touch
             </a>
+          </div>
+
+          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2">
+            {[
+              ["GitHub", GITHUB_URL],
+              ["LinkedIn", LINKEDIN_URL],
+              ["Email", `mailto:${EMAIL}`],
+            ].map(([label, href]) => (
+              <a
+                key={label}
+                href={href}
+                target={href.startsWith("http") ? "_blank" : undefined}
+                rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                className="font-mono text-[11px] uppercase tracking-readout text-muted transition-colors hover:text-accent"
+              >
+                {label} ↗
+              </a>
+            ))}
           </div>
         </motion.div>
       </div>
