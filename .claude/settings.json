@@ -10,7 +10,12 @@
       "Bash(node -e \"const p=require\\('./package.json'\\);console.log\\(Object.keys\\(p.dependencies\\).filter\\(d=>/react-icons|fontsource|prop-types/.test\\(d\\)\\).join\\('\\\\n'\\)\\)\")",
       "Bash(python3 gen.py)",
       "Bash(python3 -c \"import xml.etree.ElementTree as ET,glob;[ET.parse\\(f\\) for f in glob.glob\\('/Users/anirudhannabathula/Desktop/WebPortfolio/portfolio/src/assets/projects/*.svg'\\)+glob.glob\\('/Users/anirudhannabathula/Desktop/WebPortfolio/portfolio/src/assets/company/{narvar,salk}.svg'.replace\\('{narvar,salk}','narvar'\\)\\)];print\\('parsed ok'\\)\")",
-      "Bash(python3 -)"
+      "Bash(python3 -)",
+      "Bash(npm run *)",
+      "Bash(echo \"LINT=$?\")",
+      "Read(//private/tmp/**)",
+      "Bash(echo \"BUILD=$?\")",
+      "Bash(python3 .claude/skills/webapp-testing/scripts/with_server.py --server 'cd portfolio && npx vite --port 5180' --port 5180 -- python3 /private/tmp/claude-501/-Users-anirudhannabathula-Desktop-WebPortfolio/2f5212e4-2d05-4599-9c86-a53df578a431/scratchpad/round3.py)"
     ]
   }
 }

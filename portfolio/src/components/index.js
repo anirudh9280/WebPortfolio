@@ -8,7 +8,9 @@ import Contact from "./Contact";
 import Footer from "./Footer";
 import Analytics from "./Analytics";
 import CommitGraph from "./CommitGraph";
-import CommitScatter from "./CommitScatter";
+import ContourField from "./ContourField";
+import CursorRing from "./CursorRing";
+import SplitWords from "./SplitWords";
 import SectionHeader from "./SectionHeader";
 import AxisRail from "./AxisRail";
 
@@ -23,7 +25,9 @@ export {
   Footer,
   Analytics,
   CommitGraph,
-  CommitScatter,
+  ContourField,
+  CursorRing,
+  SplitWords,
   SectionHeader,
   AxisRail,
 };

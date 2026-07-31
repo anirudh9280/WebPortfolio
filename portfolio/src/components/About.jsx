@@ -10,7 +10,8 @@ const About = () => (
     <SectionHeader
       label="About"
       title="Overview."
-      readout={`${courseCount} courses`}
+      readout="{n} courses"
+      count={courseCount}
     />
 
     <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-16">
@@ -24,14 +25,14 @@ const About = () => (
           calibrated. At{" "}
           <span className="font-medium text-ink">Narvar</span> and{" "}
           <span className="font-medium text-ink">EVgo</span> I built the
-          pipelines underneath the analysis — Airflow into BigQuery, Snowflake
-          into S3 — and the semantic layers that let other people answer their
+          pipelines underneath the analysis (Airflow into BigQuery, Snowflake
+          into S3), plus the semantic layers that let other people answer their
           own questions.
         </p>
         <p className="mt-5 max-w-2xl text-[17px] leading-[1.75] text-muted">
           The thread through all of it is instrumentation: shipping systems that
           report honestly on how well they work. This site is built the same
-          way — the plot above is its own commit history, and{" "}
+          way, and{" "}
           <a
             href="/analytics"
             className="text-accent underline decoration-accent/35 underline-offset-4 transition-colors hover:decoration-accent"

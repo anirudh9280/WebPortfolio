@@ -223,18 +223,20 @@ StaticSkillList.propTypes = { darkMode: PropTypes.bool.isRequired };
 const SkillsMarquee = () => {
   const { darkMode } = useTheme();
   const prefersReduced = useReducedMotion();
-  // null = follow the OS setting. true/false = the visitor chose explicitly,
-  // which always wins. This is why the toggle can turn motion ON for someone
-  // running "Reduce motion" who still wants to see the rows move.
-  const [override, setOverride] = useState(null);
-  const animating = override ?? !prefersReduced;
+  // Animating is the default for everyone, by explicit product decision: the
+  // rows are the point of the section and shouldn't need a click to appear.
+  // Reduced-motion visitors therefore see movement until they hit Pause, which
+  // is the tradeoff being accepted. Everything else on the site still honours
+  // the OS setting; this is the one deliberate exception.
+  const [animating, setAnimating] = useState(true);
 
   return (
     <>
       <SectionHeader
         label="Skills"
         title="What I work with."
-        readout={`${skillCount} tracked · ${SKILL_CATEGORIES.length} groups`}
+        readout={`{n} tracked · ${SKILL_CATEGORIES.length} groups`}
+        count={skillCount}
       />
 
       {animating ? (
@@ -256,15 +258,15 @@ const SkillsMarquee = () => {
       <div className="mt-8 flex flex-col items-center gap-2">
         <button
           type="button"
-          onClick={() => setOverride(!animating)}
+          onClick={() => setAnimating((v) => !v)}
           aria-pressed={animating}
           className="rounded-chip border border-line/15 px-3 py-1.5 font-mono text-[10px] uppercase tracking-readout text-muted transition-colors hover:border-accent hover:text-accent"
         >
           {animating ? "Pause animation" : "Animate skills"}
         </button>
-        {!animating && prefersReduced ? (
+        {animating && prefersReduced ? (
           <p className="text-center font-mono text-[10px] text-muted/70">
-            Paused because your system asks for reduced motion
+            Your system asks for reduced motion. Pause to stop the rows.
           </p>
         ) : null}
       </div>

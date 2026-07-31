@@ -107,7 +107,8 @@ const Experience = () => (
     <SectionHeader
       label="Experience"
       title="Where I've worked."
-      readout={`${experiences.length} roles · ${currentCount} current`}
+      readout={`{n} roles · ${currentCount} current`}
+      count={experiences.length}
     />
 
     <div className="mt-12">

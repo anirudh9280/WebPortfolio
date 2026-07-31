@@ -967,8 +967,8 @@ const CommitGraph = () => {
             <span className="font-mono text-ink">git blame</span> of the tracked
             tree, so a commit is counted only while at least one of its lines
             still survives in the current code. The full history is longer than
-            the commit figure above — the plot on the home page reads the
-            complete git log.
+            the figure above, because the home page reads the complete git log
+            instead.
           </p>
         </div>
 

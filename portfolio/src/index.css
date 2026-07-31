@@ -92,6 +92,20 @@ html {
   background: rgb(var(--accent) / 0.28);
 }
 
+/* Visually hidden but still read, findable and translatable. clip-path rather
+   than display:none, which would remove it from the accessibility tree. */
+.sr-only-clip {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 :focus-visible {
   outline: 2px solid rgb(var(--accent));
   outline-offset: 2px;
@@ -251,6 +265,69 @@ html {
 .axis-tick[aria-current="true"] .axis-tick-mark {
   width: 22px;
   background: rgb(var(--accent));
+}
+
+/* ============================================================================
+   CURSOR RING
+
+   Trails the pointer. The NATIVE cursor stays visible -- `cursor: none` breaks
+   the pointer-size and high-contrast settings people configure for
+   accessibility, and no media query exists to detect that they did.
+   ========================================================================= */
+
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 60;
+  border-radius: 9999px;
+  border: 1px solid rgb(var(--ink) / 0.35);
+  pointer-events: none;
+  /* Transform-only, so it never triggers layout. */
+  will-change: transform;
+  transition: border-color 0.18s ease;
+}
+
+.cursor-ring.is-active {
+  border-color: rgb(var(--accent));
+}
+
+/* Belt to the JS braces: never render on touch or a coarse pointer. */
+@media not all and (any-hover: hover) and (pointer: fine) {
+  .cursor-ring {
+    display: none;
+  }
+}
+
+/* ============================================================================
+   SCROLL-DRIVEN AXIS RAIL
+
+   CSS scroll timelines are compositor-threaded (Safari 26.4 moved them off the
+   main thread explicitly), which makes this the only genuinely jank-proof
+   animation on the page. Guarded by @supports; browsers without it get the
+   static rail, which is the previous behaviour.
+   ========================================================================= */
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    @keyframes rail-grow {
+      from {
+        transform: scaleY(0.15);
+      }
+      to {
+        transform: scaleY(1);
+      }
+    }
+
+    .axis-rail-line {
+      transform-origin: top center;
+      /* animation-timeline MUST come after animation, or the shorthand resets
+         it to `auto` and the whole thing silently runs on time instead. */
+      animation: rail-grow linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0% 60%;
+    }
+  }
 }
 
 /* ============================================================================

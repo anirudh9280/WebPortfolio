@@ -132,7 +132,8 @@ const Works = () => (
     <SectionHeader
       label="Projects"
       title="Selected work."
-      readout={`${projectCount} shipped`}
+      readout="{n} shipped"
+      count={projectCount}
     />
 
     <div className="mt-6">

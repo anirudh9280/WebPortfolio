@@ -17,7 +17,7 @@ export const projects = [
     name: "ChainSense",
     blurb: "Behavioral segmentation of Ethereum wallets",
     description:
-      "Clusters ~6.3M active Ethereum wallets into behavioral archetypes from on-chain activity alone — no address labels, no token lists. Each wallet becomes a 26-dimensional feature vector clustered with HDBSCAN. A 159K-wallet cohort surfaced purely from behavior turned out to be phishing-victim drain wallets, confirmed after the fact against Etherscan.",
+      "Clusters ~6.3M active Ethereum wallets into behavioral archetypes from on-chain activity alone, with no address labels and no token lists. Each wallet becomes a 26-dimensional feature vector clustered with HDBSCAN. A 159K-wallet cohort surfaced purely from behavior turned out to be phishing-victim drain wallets, confirmed after the fact against Etherscan.",
     metric: "6.3M wallets · 18 clusters · 7 archetypes",
     tags: ["Python", "DuckDB", "HDBSCAN", "XGBoost", "FastAPI", "React"],
     image: chainsense,

@@ -24,8 +24,8 @@ const Analytics = () => (
           How this site got built.
         </h1>
         <p className="mt-5 max-w-2xl text-[17px] leading-[1.75] text-muted">
-          Every line of this portfolio, attributed and plotted. When the commits
-          happened, which files they touched, and how the codebase grew — read
+          Every line of this portfolio, attributed and plotted: when the commits
+          happened, which files they touched, and how the codebase grew, read
           from a per-line git blame of the repo itself.
         </p>
       </div>

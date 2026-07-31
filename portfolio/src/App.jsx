@@ -6,6 +6,7 @@ import {
   Analytics,
   AxisRail,
   Contact,
+  CursorRing,
   Experience,
   Footer,
   Hero,
@@ -43,6 +44,9 @@ function App() {
       {/* Covers every framer-motion animation at once, including the section
           entrances, so reduced-motion doesn't have to be handled per-component. */}
       <MotionConfig reducedMotion="user">
+        {/* Outside the router so it survives route changes. Renders nothing on
+            touch devices or under reduced motion. */}
+        <CursorRing />
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<HomePage />} />

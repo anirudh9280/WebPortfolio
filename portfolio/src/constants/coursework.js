@@ -20,6 +20,8 @@ export const coursework = [
       { code: "106", title: "Data Visualization" },
       { code: "140A", title: "Probabilistic Modeling & ML" },
       { code: "140B", title: "Representation Learning" },
+      { code: "180A", title: "Data Science Project I" },
+      { code: "180B", title: "Data Science Project II" },
     ],
   },
   {
@@ -37,7 +39,10 @@ export const coursework = [
     courses: [
       { code: "18", title: "Linear Algebra" },
       { code: "20E", title: "Vector Calculus" },
+      { code: "173A", title: "Optimization for Data Science I" },
+      { code: "173B", title: "Optimization for Data Science II" },
       { code: "180A", title: "Introduction to Probability" },
+      { code: "181A", title: "Mathematical Statistics I" },
       { code: "189", title: "Data Analysis & Inference" },
     ],
   },
@@ -47,6 +52,7 @@ export const coursework = [
     courses: [
       { code: "108", title: "Data Science in Practice" },
       { code: "118C", title: "Neural Signal Processing" },
+      { code: "181", title: "Neural Networks & Deep Learning" },
     ],
   },
 ];
