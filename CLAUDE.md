@@ -90,6 +90,14 @@ Two things are easy to break here:
 
 Theme transitions are opt-in: `toggleTheme` adds `.theme-transition` to `<html>` for ~350 ms. Do **not** reintroduce a blanket `* { transition: ... }` — that was a measurable scroll-jank source.
 
+## Motion is one switch, and it defaults ON
+
+`MotionContext` owns every animation on the site. It puts `motion-on` / `motion-off` on `<html>` (pre-set by the inline script in `index.html`), persists to `localStorage`, and the navbar exposes it as **Motion on / off**.
+
+**It deliberately does not follow `prefers-reduced-motion`.** Each component used to call `useReducedMotion()` on its own, so a machine with Reduce Motion enabled silently lost the hero canvas, the cursor ring and the skills rows with no explanation and no way to turn them on. Three separate rounds of "why isn't this animating" came out of that. The tradeoff is accepted because there is now one obvious, persistent control, and the navbar tooltip says when the OS asked for reduced motion.
+
+So: **never add a bare `@media (prefers-reduced-motion: reduce)` block.** Gate on `html.motion-off` instead, or read `useMotionPref()` in JS. `MotionConfig` in `App.jsx` maps the switch onto framer-motion (`"never"` / `"always"`), which covers every entrance and `useInView`.
+
 `tailwind.config.js` sets `darkMode: ["selector", ".dark-mode"]`, so new components can use `dark:` variants. Prefer that over JS ternaries in new code, but **never mix both in one component** — `.light-mode .text-white` and `.dark-mode .dark\:text-white` have identical specificity and resolve by stylesheet order.
 
 ## Performance constraints
@@ -100,6 +108,7 @@ Learned the hard way; re-breaking these regresses scroll smoothness:
 - **Every canvas rAF loop must be gated.** `ContourField.jsx` is the reference: an `IntersectionObserver` cancels the loop off-screen, `visibilitychange` cancels it on a hidden tab, DPR is capped at 2, and `prefers-reduced-motion` renders exactly one frame. An ungated loop rendering off-screen was the worst perf bug this repo has had.
 - **Canvas cannot read CSS custom properties.** Anything drawing to a canvas has to re-read `getComputedStyle(document.body)` when the theme class changes and repaint, or it keeps dark-mode colours in light mode. `ContourField` watches `document.body` with a `MutationObserver` for exactly this.
 - **Never animate a `rgb(var(--token) / a)` string with framer-motion.** It throws "not an animatable color". Toggle a class and let CSS transition it, which is what `CursorRing` does for its border.
+- **`CursorRing` springs must stay under-damped.** Damping ratio is `c / (2 * sqrt(k * m))`. The first version was `damping: 28, stiffness: 350, mass: 0.35`, i.e. 1.27 — overdamped, so it crawled toward the pointer and read as input lag. Current values give 0.92, measured at 0.9px behind after 50 ms. Also: hover state comes from `pointerover`, not `pointermove`, because `closest()` on every move event walks the DOM hundreds of times a second.
 - **`SplitWords` puts the inter-word space as a SIBLING of the clip span**, not inside it. Inside, CSS collapses it as trailing whitespace and headings render as "WhereI'veworked.".
 - **The skills marquee is CSS `@keyframes` on `transform`**, not framer-motion — it must stay on the compositor thread. `will-change: transform` belongs on the two tracks only, never the ~96 chips.
 - Marquee seam math: the track is `w-max` with two identical groups animating `translateX(0) → -50%`. The gap lives on each **group** (`gap-x-N pr-N`, equal at every breakpoint), never on the track — a gap on the track leaves the loop short by `gap/2` and stutters every cycle.

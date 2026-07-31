@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { useInView, useReducedMotion } from "framer-motion";
+import { useInView } from "framer-motion";
+import { useMotionPref } from "../context/MotionContext";
 
 const easeOutCubic = (t) => 1 - (1 - t) ** 3;
 
@@ -20,7 +21,8 @@ const easeOutCubic = (t) => 1 - (1 - t) ** 3;
 export const useCountUp = (value, { duration = 1100 } = {}) => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "0px 0px -60px 0px" });
-  const prefersReducedMotion = useReducedMotion();
+  const { motionOn } = useMotionPref();
+  const prefersReducedMotion = !motionOn;
   const [display, setDisplay] = useState(0);
 
   useEffect(() => {

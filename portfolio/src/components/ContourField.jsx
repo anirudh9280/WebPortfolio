@@ -4,7 +4,7 @@ import { contours } from "d3-contour";
 import { geoPath } from "d3-geo";
 import { interpolateViridis } from "d3-scale-chromatic";
 import { createNoise3D } from "simplex-noise";
-import { useReducedMotion } from "framer-motion";
+import { useMotionPref } from "../context/MotionContext";
 
 // Coarse field, rendered at full canvas size. Marching squares is O(cells), so
 // the grid is the cost knob; geoPath scales the polygons back up for free.
@@ -31,7 +31,8 @@ const SPACE_SCALE = 0.021;
  */
 const ContourField = ({ className = "", opacity = 0.5 }) => {
   const canvasRef = useRef(null);
-  const prefersReducedMotion = useReducedMotion();
+  const { motionOn } = useMotionPref();
+  const staticOnly = !motionOn;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -141,8 +142,8 @@ const ContourField = ({ className = "", opacity = 0.5 }) => {
     readTheme();
     resize();
 
-    if (prefersReducedMotion) {
-      // Reduced does not mean none: render one frame and stop. A still contour
+    if (staticOnly) {
+      // Off does not mean blank: render one frame and stop. A still contour
       // field is a perfectly good image, so the fallback is not a blank box.
       draw(0);
     }
@@ -150,7 +151,7 @@ const ContourField = ({ className = "", opacity = 0.5 }) => {
     const io = new IntersectionObserver(
       ([entry]) => {
         onScreen = entry.isIntersecting;
-        if (prefersReducedMotion) return;
+        if (staticOnly) return;
         if (onScreen) start();
         else stop();
       },
@@ -160,19 +161,19 @@ const ContourField = ({ className = "", opacity = 0.5 }) => {
 
     const onVisibility = () => {
       if (document.hidden) stop();
-      else if (!prefersReducedMotion) start();
+      else if (!staticOnly) start();
     };
     document.addEventListener("visibilitychange", onVisibility);
 
     const ro = new ResizeObserver(() => {
-      if (resize() && (prefersReducedMotion || !raf)) draw(performance.now());
+      if (resize() && (staticOnly || !raf)) draw(performance.now());
     });
     ro.observe(canvas);
 
     // Theme lives as a body class, so watch that rather than polling.
     const mo = new MutationObserver(() => {
       readTheme();
-      if (prefersReducedMotion || !raf) draw(performance.now());
+      if (staticOnly || !raf) draw(performance.now());
     });
     mo.observe(document.body, {
       attributes: true,
@@ -186,7 +187,7 @@ const ContourField = ({ className = "", opacity = 0.5 }) => {
       mo.disconnect();
       document.removeEventListener("visibilitychange", onVisibility);
     };
-  }, [prefersReducedMotion]);
+  }, [staticOnly]);
 
   return (
     <canvas

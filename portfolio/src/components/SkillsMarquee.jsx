@@ -6,7 +6,7 @@ import {
   useState,
 } from "react";
 import PropTypes from "prop-types";
-import { useReducedMotion } from "framer-motion";
+import { useMotionPref } from "../context/MotionContext";
 
 import SectionHeader from "./SectionHeader";
 import { SectionWrapper } from "../hoc";
@@ -196,7 +196,7 @@ MarqueeRow.propTypes = {
   darkMode: PropTypes.bool.isRequired,
 };
 
-/** Reduced-motion fallback: same category grouping, standing still. */
+/** Motion-off form: the same category grouping, standing still and complete. */
 const StaticSkillList = ({ darkMode }) => (
   <div className="mt-10 space-y-8">
     {rows.map((row) => (
@@ -222,13 +222,17 @@ StaticSkillList.propTypes = { darkMode: PropTypes.bool.isRequired };
 
 const SkillsMarquee = () => {
   const { darkMode } = useTheme();
-  const prefersReduced = useReducedMotion();
+  const { motionOn, prefersReducedMotion: prefersReduced } = useMotionPref();
   // Animating is the default for everyone, by explicit product decision: the
   // rows are the point of the section and shouldn't need a click to appear.
   // Reduced-motion visitors therefore see movement until they hit Pause, which
   // is the tradeoff being accepted. Everything else on the site still honours
   // the OS setting; this is the one deliberate exception.
-  const [animating, setAnimating] = useState(true);
+  // null = follow the site-wide Motion switch in the navbar. A click here sets
+  // an explicit local override, so this button can still pause just the rows
+  // without also turning off the hero canvas and the cursor ring.
+  const [override, setOverride] = useState(null);
+  const animating = override ?? motionOn;
 
   return (
     <>
@@ -258,7 +262,7 @@ const SkillsMarquee = () => {
       <div className="mt-8 flex flex-col items-center gap-2">
         <button
           type="button"
-          onClick={() => setAnimating((v) => !v)}
+          onClick={() => setOverride(!animating)}
           aria-pressed={animating}
           className="rounded-chip border border-line/15 px-3 py-1.5 font-mono text-[10px] uppercase tracking-readout text-muted transition-colors hover:border-accent hover:text-accent"
         >

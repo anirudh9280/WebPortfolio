@@ -4,12 +4,14 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { navLinks } from "../constants";
 import { GITHUB_URL, LINKEDIN_URL, RESUME_URL } from "../constants/links";
 import { useTheme } from "../context/ThemeContext";
+import { useMotionPref } from "../context/MotionContext";
 import { useActiveSection, scrollToSection } from "../hooks/useActiveSection";
 
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { darkMode, toggleTheme } = useTheme();
+  const { motionOn, prefersReducedMotion, toggleMotion } = useMotionPref();
   const isHome = location.pathname === "/";
   const active = useActiveSection(isHome);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -89,6 +91,30 @@ const Navbar = () => {
           >
             Résumé
           </a>
+
+          {/* One switch for every animation on the site: the hero canvas, the
+              skills rows, the cursor ring, the scroll-driven rail and every
+              framer-motion entrance. Motion is on by default even when the OS
+              asks for reduced motion, so this is the escape hatch. */}
+          <button
+            type="button"
+            onClick={toggleMotion}
+            aria-pressed={motionOn}
+            title={
+              prefersReducedMotion && motionOn
+                ? "Your system asks for reduced motion. Click to turn animation off."
+                : motionOn
+                  ? "Turn animation off"
+                  : "Turn animation on"
+            }
+            className={`rounded-chip border px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-readout transition-colors ${
+              motionOn
+                ? "border-line/15 text-muted hover:border-accent hover:text-accent"
+                : "border-accent/40 text-accent"
+            }`}
+          >
+            Motion {motionOn ? "on" : "off"}
+          </button>
 
           <button
             type="button"

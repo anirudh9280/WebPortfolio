@@ -309,24 +309,22 @@ html {
    ========================================================================= */
 
 @supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    @keyframes rail-grow {
-      from {
-        transform: scaleY(0.15);
-      }
-      to {
-        transform: scaleY(1);
-      }
+  @keyframes rail-grow {
+    from {
+      transform: scaleY(0.15);
     }
+    to {
+      transform: scaleY(1);
+    }
+  }
 
-    .axis-rail-line {
-      transform-origin: top center;
-      /* animation-timeline MUST come after animation, or the shorthand resets
-         it to `auto` and the whole thing silently runs on time instead. */
-      animation: rail-grow linear both;
-      animation-timeline: scroll(root block);
-      animation-range: 0% 60%;
-    }
+  .axis-rail-line {
+    transform-origin: top center;
+    /* animation-timeline MUST come after animation, or the shorthand resets it
+       to `auto` and the whole thing silently runs on time instead. */
+    animation: rail-grow linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0% 60%;
   }
 }
 
@@ -410,28 +408,26 @@ html {
    while hovering because it is a later, more specific rule. Overscaled slightly
    so the drift never exposes an edge. */
 @supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    @keyframes cover-drift {
-      from {
-        transform: scale(1.08) translateY(-2.5%);
-      }
-      to {
-        transform: scale(1.08) translateY(2.5%);
-      }
+  @keyframes cover-drift {
+    from {
+      transform: scale(1.08) translateY(-2.5%);
     }
+    to {
+      transform: scale(1.08) translateY(2.5%);
+    }
+  }
 
-    .project-card__cover img {
-      /* animation-timeline must follow animation, or the shorthand resets it. */
-      animation: cover-drift linear both;
-      animation-timeline: view();
-      animation-range: cover 0% cover 100%;
-    }
+  .project-card__cover img {
+    /* animation-timeline must follow animation, or the shorthand resets it. */
+    animation: cover-drift linear both;
+    animation-timeline: view();
+    animation-range: cover 0% cover 100%;
+  }
 
-    /* Hover still takes over cleanly. */
-    .project-card:hover .project-card__cover img {
-      animation-play-state: paused;
-      transform: scale(1.08);
-    }
+  /* Hover still takes over cleanly. */
+  .project-card:hover .project-card__cover img {
+    animation-play-state: paused;
+    transform: scale(1.08);
   }
 }
 
@@ -661,25 +657,37 @@ html {
    REDUCED MOTION
    ========================================================================= */
 
-@media (prefers-reduced-motion: reduce) {
-  /* Makes the native <a href="#about"> hero button honour the preference for
-     free -- the main reason it stayed an anchor instead of scrollIntoView. */
-  html {
-    scroll-behavior: auto;
-  }
+/* ============================================================================
+   MOTION OFF
 
-  .theme-transition,
-  .theme-transition *,
-  .theme-transition *::before,
-  .theme-transition *::after {
-    transition: none !important;
-  }
+   One switch, set by MotionContext and mirrored onto <html> by the inline
+   script in index.html. Motion is ON by default for everyone, including under
+   the OS reduced-motion setting: each component used to check that setting on
+   its own, which silently removed the hero animation, the cursor ring and the
+   skills rows with no explanation and no way to re-enable them. The navbar
+   control is the escape hatch, and it says when the OS asked for reduced
+   motion so the state is at least explained.
+   ========================================================================= */
 
-  /* Ambient, non-essential loops only. Deliberately NOT a blanket
-     `* { animation: none }`: the skills marquee is gated in React and has an
-     explicit opt-in toggle, so a global rule here would silently override a
-     visitor who asked for the motion and leave the button doing nothing. */
-  .animate-signal-pulse {
-    animation: none !important;
-  }
+html.motion-off {
+  scroll-behavior: auto;
+}
+
+html.motion-off .animate-signal-pulse,
+html.motion-off .marquee-track,
+html.motion-off .axis-rail-line,
+html.motion-off .project-card__cover img {
+  animation: none !important;
+}
+
+html.motion-off .axis-rail-line,
+html.motion-off .project-card__cover img {
+  transform: none !important;
+}
+
+html.motion-off .theme-transition,
+html.motion-off .theme-transition *,
+html.motion-off .theme-transition *::before,
+html.motion-off .theme-transition *::after {
+  transition: none !important;
 }
