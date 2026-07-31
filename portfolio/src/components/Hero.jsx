@@ -3,12 +3,7 @@ import { motion } from "framer-motion";
 import { styles } from "../styles";
 import CommitScatter from "./CommitScatter";
 import { projectCount } from "../constants/projects";
-import {
-  EMAIL,
-  GITHUB_URL,
-  LINKEDIN_URL,
-  RESUME_URL,
-} from "../constants/links";
+import { GITHUB_URL, LINKEDIN_URL, RESUME_URL } from "../constants/links";
 
 const fmt = new Intl.NumberFormat("en-US");
 
@@ -75,13 +70,12 @@ const Hero = () => {
             {[
               ["GitHub", GITHUB_URL],
               ["LinkedIn", LINKEDIN_URL],
-              ["Email", `mailto:${EMAIL}`],
             ].map(([label, href]) => (
               <a
                 key={label}
                 href={href}
-                target={href.startsWith("http") ? "_blank" : undefined}
-                rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="font-mono text-[11px] uppercase tracking-readout text-muted transition-colors hover:text-accent"
               >
                 {label} ↗

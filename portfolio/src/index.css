@@ -561,10 +561,6 @@ html {
     scroll-behavior: auto;
   }
 
-  .marquee-track {
-    animation: none !important;
-  }
-
   .theme-transition,
   .theme-transition *,
   .theme-transition *::before,
@@ -572,11 +568,11 @@ html {
     transition: none !important;
   }
 
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  /* Ambient, non-essential loops only. Deliberately NOT a blanket
+     `* { animation: none }`: the skills marquee is gated in React and has an
+     explicit opt-in toggle, so a global rule here would silently override a
+     visitor who asked for the motion and leave the button doing nothing. */
+  .animate-signal-pulse {
+    animation: none !important;
   }
 }

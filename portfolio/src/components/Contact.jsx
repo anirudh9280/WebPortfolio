@@ -14,7 +14,9 @@ import {
 } from "../constants/links";
 
 const EMAILJS = {
-  serviceId: "service_uneg1dg",
+  // Reconnected Gmail service, Jul 2026. The previous one (service_uneg1dg)
+  // returned 412 "Gmail_API: Invalid grant" once its OAuth token lapsed.
+  serviceId: "service_p5g0k6w",
   templateId: "template_9d98q7o",
   publicKey: "y6EGu6pqN2I7S6rpU",
 };

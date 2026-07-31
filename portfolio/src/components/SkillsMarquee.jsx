@@ -140,7 +140,7 @@ MarqueeGroup.propTypes = {
   clone: PropTypes.bool,
 };
 
-const MarqueeRow = ({ row, darkMode, paused }) => {
+const MarqueeRow = ({ row, darkMode }) => {
   const { viewportRef, groupRef, copies } = useGroupCopies(row.items.length);
 
   return (
@@ -165,7 +165,7 @@ const MarqueeRow = ({ row, darkMode, paused }) => {
             row.direction === "left"
               ? "animate-marquee-left"
               : "animate-marquee-right"
-          } ${paused ? "is-paused" : ""}`}
+          }`}
           style={{
             // Scales with the filled length so px/s stays constant across rows.
             "--marquee-duration": `${(row.items.length * copies * SECONDS_PER_ITEM).toFixed(1)}s`,
@@ -194,7 +194,6 @@ const MarqueeRow = ({ row, darkMode, paused }) => {
 MarqueeRow.propTypes = {
   row: PropTypes.object.isRequired,
   darkMode: PropTypes.bool.isRequired,
-  paused: PropTypes.bool.isRequired,
 };
 
 /** Reduced-motion fallback: same category grouping, standing still. */
@@ -223,8 +222,12 @@ StaticSkillList.propTypes = { darkMode: PropTypes.bool.isRequired };
 
 const SkillsMarquee = () => {
   const { darkMode } = useTheme();
-  const reduceMotion = useReducedMotion();
-  const [paused, setPaused] = useState(false);
+  const prefersReduced = useReducedMotion();
+  // null = follow the OS setting. true/false = the visitor chose explicitly,
+  // which always wins. This is why the toggle can turn motion ON for someone
+  // running "Reduce motion" who still wants to see the rows move.
+  const [override, setOverride] = useState(null);
+  const animating = override ?? !prefersReduced;
 
   return (
     <>
@@ -234,38 +237,37 @@ const SkillsMarquee = () => {
         readout={`${skillCount} tracked · ${SKILL_CATEGORIES.length} groups`}
       />
 
-      {reduceMotion ? (
-        <StaticSkillList darkMode={darkMode} />
+      {animating ? (
+        // Negative margins cancel SectionWrapper's px so the bands span the
+        // full content box. Deliberately not 100vw -- that includes the
+        // scrollbar and causes horizontal overflow on desktop.
+        <div className="-mx-6 mt-10 flex flex-col gap-6 sm:-mx-16">
+          {rows.map((row) => (
+            <MarqueeRow key={row.category} row={row} darkMode={darkMode} />
+          ))}
+        </div>
       ) : (
-        <>
-          {/* Negative margins cancel SectionWrapper's px so the bands span the
-              full content box. Deliberately not 100vw -- that includes the
-              scrollbar and causes horizontal overflow on desktop. */}
-          <div className="-mx-6 mt-10 flex flex-col gap-6 sm:-mx-16">
-            {rows.map((row) => (
-              <MarqueeRow
-                key={row.category}
-                row={row}
-                darkMode={darkMode}
-                paused={paused}
-              />
-            ))}
-          </div>
-
-          {/* WCAG 2.2.2: auto-moving content needs an explicit control.
-              Hover-pause alone excludes keyboard and touch users. */}
-          <div className="mt-8 flex justify-center">
-            <button
-              type="button"
-              onClick={() => setPaused((p) => !p)}
-              aria-pressed={paused}
-              className="rounded-chip border border-line/15 px-3 py-1.5 font-mono text-[10px] uppercase tracking-readout text-muted transition-colors hover:border-accent hover:text-accent"
-            >
-              {paused ? "Resume" : "Pause"} animation
-            </button>
-          </div>
-        </>
+        <StaticSkillList darkMode={darkMode} />
       )}
+
+      {/* WCAG 2.2.2: auto-moving content needs an explicit control, and
+          hover-pause alone excludes keyboard and touch users. Works both ways,
+          so reduced-motion visitors can opt in rather than being locked out. */}
+      <div className="mt-8 flex flex-col items-center gap-2">
+        <button
+          type="button"
+          onClick={() => setOverride(!animating)}
+          aria-pressed={animating}
+          className="rounded-chip border border-line/15 px-3 py-1.5 font-mono text-[10px] uppercase tracking-readout text-muted transition-colors hover:border-accent hover:text-accent"
+        >
+          {animating ? "Pause animation" : "Animate skills"}
+        </button>
+        {!animating && prefersReduced ? (
+          <p className="text-center font-mono text-[10px] text-muted/70">
+            Paused because your system asks for reduced motion
+          </p>
+        ) : null}
+      </div>
     </>
   );
 };
