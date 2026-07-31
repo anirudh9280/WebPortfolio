@@ -94,7 +94,7 @@ export const experiences = [
     date: "Nov 2024 — Present",
     location: "La Jolla, CA",
     current: true,
-    website: "https://ds3ucsd.com/",
+    website: "https://main-site-ds3s-projects.vercel.app/",
     points: [
       "Led 12+ data science projects, mentoring teams on AI model optimization",
       "Matched project ideas with teams based on expertise and organized showcases and workshops",

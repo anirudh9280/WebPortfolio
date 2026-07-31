@@ -1,0 +1,37 @@
+# Hostinger runs Apache. This is what makes the /analytics route survive a
+# direct visit or a refresh -- without it the server looks for a real
+# /analytics directory, finds nothing, and returns 404 before React ever loads.
+#
+# The previous public/_redirects was Netlify syntax (and had a typo:
+# "/.index.html"), so it did nothing here.
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Never rewrite requests that map to a real file or directory -- assets,
+  # meta/*.csv, favicon and so on must still be served directly.
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Everything else is a client-side route.
+  RewriteRule . /index.html [L]
+</IfModule>
+
+# Hashed filenames are immutable, so cache them hard.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+  # index.html and the CSVs must not be, or deploys won't take effect.
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType text/csv "access plus 0 seconds"
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/csv application/javascript image/svg+xml
+</IfModule>

@@ -173,7 +173,11 @@ html {
   pointer-events: none;
 }
 
-@media (min-width: 1180px) {
+/* At rest the rail is only ~50px wide (marks, no labels), so it clears the
+   full-bleed content edge at (vw - 1280)/2 from about 1400px up. Labels are
+   taken out of flow and revealed on hover -- keeping them in flow made the
+   rail ~130px wide, which collided with the full-bleed skills marquee. */
+@media (min-width: 1400px) {
   .axis-rail {
     display: flex;
   }
@@ -209,23 +213,37 @@ html {
     background-color 0.25s ease;
 }
 
+/* Out of flow so the rail stays mark-width at rest. Revealed on hover/focus,
+   where overlaying content is fine because the visitor is aiming at it. */
 .axis-tick-label {
+  position: absolute;
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
   font-family: "IBM Plex Mono", ui-monospace, monospace;
   font-size: 10px;
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: rgb(var(--muted));
-  opacity: 0.55;
+  background: rgb(var(--ground));
+  padding: 3px 7px;
+  border-radius: 2px;
+  opacity: 0;
+  pointer-events: none;
   transition:
-    opacity 0.25s ease,
-    color 0.25s ease;
+    opacity 0.2s ease,
+    color 0.2s ease;
   white-space: nowrap;
 }
 
-.axis-tick:hover .axis-tick-label,
-.axis-tick[aria-current="true"] .axis-tick-label {
+.axis-rail:hover .axis-tick-label,
+.axis-tick:focus-visible .axis-tick-label {
   opacity: 1;
+}
+
+.axis-rail:hover .axis-tick[aria-current="true"] .axis-tick-label,
+.axis-tick:focus-visible .axis-tick-label {
   color: rgb(var(--accent));
 }
 

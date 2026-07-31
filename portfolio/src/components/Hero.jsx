@@ -75,9 +75,18 @@ const Hero = () => {
 
         <dl className="mt-4 flex flex-wrap items-center gap-x-7 gap-y-2 border-t border-line/10 pt-4">
           {[
-            ["Lines", stats ? fmt.format(stats.lines) : "—"],
             ["Commits", stats ? fmt.format(stats.commits) : "—"],
-            ["Files", stats ? fmt.format(stats.files) : "—"],
+            ["Lines changed", stats ? fmt.format(stats.churn) : "—"],
+            [
+              "Last push",
+              stats?.lastCommit
+                ? stats.lastCommit.toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  })
+                : "—",
+            ],
             ["Projects", fmt.format(projectCount)],
           ].map(([label, value]) => (
             <div key={label} className="flex items-baseline gap-2">

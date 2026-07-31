@@ -111,7 +111,10 @@ const Experience = () => (
     />
 
     <div className="mt-12">
-      <VerticalTimeline lineColor="rgb(var(--grid) / 0.14)">
+      {/* animate={false}: the library runs its own visibility-sensor bounce-in
+          on top of SectionWrapper's framer-motion entrance. The two fight, and
+          left-side cards end up stuck part-way through at reduced opacity. */}
+      <VerticalTimeline lineColor="rgb(var(--grid) / 0.14)" animate={false}>
         {experiences.map((experience) => (
           <ExperienceCard
             key={`${experience.company_name}-${experience.date}`}

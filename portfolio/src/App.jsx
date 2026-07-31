@@ -15,9 +15,13 @@ import {
 } from "./components";
 import { ThemeProvider } from "./context/ThemeContext";
 
+// overflow-x-clip, not hidden: entrance animations translate elements up to
+// 100px sideways, which makes a 390px viewport briefly scrollable. `clip`
+// suppresses that without creating a scroll container, so position:fixed (the
+// axis rail) and smooth scrolling keep working.
 function HomePage() {
   return (
-    <div className="relative z-0 bg-ground">
+    <div className="relative z-0 overflow-x-clip bg-ground">
       <Navbar />
       <AxisRail />
       <main>
