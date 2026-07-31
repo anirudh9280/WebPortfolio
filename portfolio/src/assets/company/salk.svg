@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" role="img" aria-label="Salk Institute monogram tile">
+  <rect x="0" y="0" width="96" height="96" rx="8" fill="#1C1832"/>
+  <rect x="0.5" y="0.5" width="95" height="95" rx="8" fill="none" stroke="#EDEBF5" stroke-opacity="0.12" stroke-width="1"/>
+
+  <text x="48" y="58" text-anchor="middle" font-family="Space Grotesk, system-ui, sans-serif" font-weight="700" font-size="34" fill="#5EC962">S</text>
+
+  <g stroke="#5EC962" stroke-opacity="0.45" stroke-width="1.5" fill="none" stroke-linecap="round">
+    <polyline points="29,72 41,65 53,72 66,64"/>
+    <line x1="53" y1="72" x2="59" y2="81"/>
+  </g>
+  <g fill="#5EC962" fill-opacity="0.85">
+    <circle cx="29" cy="72" r="2.2"/>
+    <circle cx="41" cy="65" r="2.2"/>
+    <circle cx="53" cy="72" r="2.2"/>
+    <circle cx="66" cy="64" r="2.2"/>
+    <circle cx="59" cy="81" r="2.2"/>
+  </g>
+</svg>

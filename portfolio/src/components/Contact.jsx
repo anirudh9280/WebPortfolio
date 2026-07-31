@@ -1,33 +1,49 @@
-import React from "react";
-import { useEffect, useState, useRef } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import emailjs from "@emailjs/browser";
-import { styles } from "../styles";
-import { EarthCanvas } from "./canvas";
+
+import SectionHeader from "./SectionHeader";
 import { SectionWrapper } from "../hoc";
-import { slideIn } from "../utils/motion";
-import { useTheme } from "../context/ThemeContext";
+import { fadeIn } from "../utils/motion";
+
+const EMAILJS = {
+  serviceId: "service_uneg1dg",
+  templateId: "template_9d98q7o",
+  publicKey: "y6EGu6pqN2I7S6rpU",
+};
+
+const CHANNELS = [
+  { label: "Email", value: "anirudh.annabathula@gmail.com", href: "mailto:anirudh.annabathula@gmail.com" },
+  { label: "GitHub", value: "anirudh9280", href: "https://github.com/anirudh9280" },
+  { label: "LinkedIn", value: "anirudha9", href: "https://www.linkedin.com/in/anirudha9" },
+  { label: "Phone", value: "408-838-9692", href: "tel:+14088389692" },
+];
+
+const inputClass =
+  "w-full rounded-panel border border-line/15 bg-surface-2 px-4 py-3 text-[15px] text-ink placeholder:text-muted/60 outline-none transition-colors focus:border-accent";
 
 const Contact = () => {
-  const { darkMode } = useTheme();
   const formRef = useRef();
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [loading, setLoading] = useState(false);
+  // Inline status instead of alert() -- alerts block the main thread and read
+  // as broken on mobile.
+  const [status, setStatus] = useState(null);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
+    setStatus(null);
+
     emailjs
       .send(
-        "service_uneg1dg",
-        "template_9d98q7o",
+        EMAILJS.serviceId,
+        EMAILJS.templateId,
         {
           from_name: form.name,
           to_name: "Anirudh",
@@ -35,114 +51,136 @@ const Contact = () => {
           to_email: "anirudh.annabathula@gmail.com",
           message: form.message,
         },
-        "y6EGu6pqN2I7S6rpU"
+        EMAILJS.publicKey
       )
       .then(
         () => {
           setLoading(false);
-          alert("Thank you. I will get back to you as soon as possible.");
+          setStatus({ ok: true, text: "Message sent. I'll reply soon." });
           setForm({ name: "", email: "", message: "" });
         },
         (error) => {
           setLoading(false);
-          console.log(error);
-          alert("Something went wrong");
+          console.error(error);
+          setStatus({
+            ok: false,
+            text: "That didn't send. Email me directly at anirudh.annabathula@gmail.com.",
+          });
         }
       );
   };
 
   return (
-    <div className="xl:mt-12 xl:flex-row flex-col-reverse flex gap-10 overflow-hidden pb-14">
-      <motion.div
-        variants={slideIn("left", "tween", 0.2, 1)}
-        className="flex-[0.75] contact-card p-8 rounded-2xl"
-      >
-        <p className={styles.sectionSubText}>
-          Get in touch. My email: anirudh.annabathula@gmail.com
-        </p>
-        <h3 className={styles.sectionHeadText}>Contact.</h3>
-        <form
+    <>
+      <SectionHeader
+        label="Contact"
+        title="Get in touch."
+        readout="La Jolla, CA · PT"
+      />
+
+      <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:gap-16">
+        <motion.form
           ref={formRef}
           onSubmit={handleSubmit}
-          className="mt-12 flex flex-col gap-8"
+          variants={fadeIn("right", "tween", 0.1, 0.7)}
+          className="flex flex-col gap-5"
         >
-          <label className="flex flex-col">
-            <span
-              className={`${darkMode ? "text-white" : "text-gray-700"} font-medium mb-4`}
-            >
-              Your Name
-            </span>
+          <label className="flex flex-col gap-2">
+            <span className="readout">Name</span>
             <input
               type="text"
               name="name"
               value={form.name}
               onChange={handleChange}
-              placeholder="What's your name?"
-              className={`${
-                darkMode ? "bg-tertiary text-white" : "bg-gray-50 text-gray-900"
-              } py-4 rounded-lg outlined-none px-6 ${
-                !darkMode ? "border border-gray-200" : "border-none"
-              } font-medium`}
+              placeholder="Your name"
+              required
+              className={inputClass}
             />
           </label>
-          <label className="flex flex-col">
-            <span
-              className={`${darkMode ? "text-white" : "text-gray-700"} font-medium mb-4`}
-            >
-              Your Email
-            </span>
+
+          <label className="flex flex-col gap-2">
+            <span className="readout">Email</span>
             <input
               type="email"
               name="email"
               value={form.email}
               onChange={handleChange}
-              placeholder="What's your email?"
-              className={`${
-                darkMode ? "bg-tertiary text-white" : "bg-gray-50 text-gray-900"
-              } py-4 rounded-lg outlined-none px-6 ${
-                !darkMode ? "border border-gray-200" : "border-none"
-              } font-medium`}
+              placeholder="you@example.com"
+              required
+              className={inputClass}
             />
           </label>
-          <label className="flex flex-col">
-            <span
-              className={`${darkMode ? "text-white" : "text-gray-700"} font-medium mb-4`}
-            >
-              Your Message
-            </span>
+
+          <label className="flex flex-col gap-2">
+            <span className="readout">Message</span>
             <textarea
-              rows="7"
+              rows={6}
               name="message"
               value={form.message}
               onChange={handleChange}
-              placeholder="What do you want to say?"
-              className={`${
-                darkMode ? "bg-tertiary text-white" : "bg-gray-50 text-gray-900"
-              } py-4 rounded-lg outlined-none px-6 ${
-                !darkMode ? "border border-gray-200" : "border-none"
-              } font-medium`}
+              placeholder="What would you like to talk about?"
+              required
+              className={`${inputClass} resize-y`}
             />
           </label>
-          <button
-            className={`${
-              darkMode ? "bg-[#915eff]" : "bg-teal-600"
-            } text-white py-3 px-8 outline-none w-fit font-bold shadow-md rounded-xl hover:opacity-90 transition-opacity`}
-            type="submit"
-          >
-            {loading ? "Sending..." : "Send"}
-          </button>
-        </form>
-      </motion.div>
-      <motion.div
-        variants={slideIn("right", "tween", 0.2, 1)}
-        className="xl:flex-1 xl:h-auto md:h-[550px] h-[350px] relative overflow-visible"
-      >
-        <div className="absolute w-full h-full">
-          <EarthCanvas />
-        </div>
-      </motion.div>
-    </div>
+
+          <div className="flex flex-wrap items-center gap-4">
+            <button
+              type="submit"
+              disabled={loading}
+              className="rounded-panel bg-accent px-6 py-3 font-mono text-[12px] font-medium uppercase tracking-readout text-on-accent transition-opacity hover:opacity-90 disabled:opacity-60"
+            >
+              {loading ? "Sending…" : "Send message"}
+            </button>
+
+            {status ? (
+              <p
+                role="status"
+                className={`text-[13px] ${status.ok ? "text-accent" : "text-ink"}`}
+              >
+                {status.text}
+              </p>
+            ) : null}
+          </div>
+        </motion.form>
+
+        <motion.div variants={fadeIn("left", "tween", 0.2, 0.7)}>
+          <div className="flex items-center gap-4">
+            <span className="readout">Channels</span>
+            <span className="panel-rule" aria-hidden="true" />
+          </div>
+
+          <ul className="mt-4 divide-y divide-line/[0.08]">
+            {CHANNELS.map((channel) => (
+              <li key={channel.label}>
+                <a
+                  href={channel.href}
+                  target={channel.href.startsWith("http") ? "_blank" : undefined}
+                  rel={
+                    channel.href.startsWith("http")
+                      ? "noopener noreferrer"
+                      : undefined
+                  }
+                  className="group flex items-baseline justify-between gap-4 py-3 transition-colors hover:text-accent"
+                >
+                  <span className="readout shrink-0">{channel.label}</span>
+                  <span className="truncate font-mono text-[13px] text-ink transition-colors group-hover:text-accent">
+                    {channel.value}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          <p className="mt-8 text-[14px] leading-[1.7] text-muted">
+            Graduating March 2027 and looking for new-grad roles in data
+            engineering, machine learning, and computer vision. Internships and
+            research collaborations welcome too.
+          </p>
+        </motion.div>
+      </div>
+    </>
   );
 };
 
-export default SectionWrapper(Contact, "contact", "contact-section");
+export default SectionWrapper(Contact, "contact");

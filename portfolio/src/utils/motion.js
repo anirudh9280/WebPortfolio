@@ -75,13 +75,16 @@ export const slideIn = (direction, type, delay, duration) => {
     };
 };
 
-export const staggerContainer = (staggerChildren, delayChildren) => {
+// Defaults matter: SectionWrapper calls this with no arguments, so without
+// them staggerChildren was undefined and every child animated in the same
+// frame -- exactly when a scroll was landing on the section.
+export const staggerContainer = (staggerChildren = 0.08, delayChildren = 0) => {
     return {
         hidden: {},
         show: {
             transition: {
-                staggerChildren: staggerChildren,
-                delayChildren: delayChildren || 0,
+                staggerChildren,
+                delayChildren,
             },
         },
     };

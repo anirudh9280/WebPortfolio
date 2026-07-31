@@ -1,115 +1,126 @@
-/* eslint-disable react-refresh/only-export-components */
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
-// function add two numbers
-
-import React from "react";
+import PropTypes from "prop-types";
 import {
   VerticalTimeline,
   VerticalTimelineElement,
 } from "react-vertical-timeline-component";
-import { motion } from "framer-motion";
 import "react-vertical-timeline-component/style.min.css";
-import { styles } from "../styles";
-import { experiences } from "../constants";
+
+import SectionHeader from "./SectionHeader";
 import { SectionWrapper } from "../hoc";
-import { textVariant } from "../utils/motion";
-import { useTheme } from "../context/ThemeContext";
+import { experiences } from "../constants";
 
-const ExperienceCard = ({ experience }) => {
-  const { darkMode } = useTheme();
+const currentCount = experiences.filter((e) => e.current).length;
 
-  return (
-    <VerticalTimelineElement
-      contentStyle={{
-        background: darkMode ? "#1d1836" : "#ffffff",
-        color: darkMode ? "#fff" : "#0f172a",
-        border: darkMode ? "none" : "1px solid #cbd5e1",
-      }}
-      contentArrowStyle={{
-        borderRight: darkMode ? "7px solid #232631" : "7px solid #e2e8f0",
-      }}
-      date={experience.date}
-      iconStyle={{ background: experience.iconBg }}
-      icon={
-        <div className="flex justify-center items-center w-full h-full">
-          <img
-            src={experience.icon}
-            alt={experience.company_name}
-            className="w-[100%] h-[85%] object-contain"
+const ExperienceCard = ({ experience }) => (
+  <VerticalTimelineElement
+    // Surfaces and arrows are driven by tokens in index.css so this stays
+    // correct in both themes without a JS branch.
+    contentStyle={{ background: "rgb(var(--surface))" }}
+    contentArrowStyle={{ borderRight: "7px solid rgb(var(--grid) / 0.14)" }}
+    date={`${experience.date}  ·  ${experience.location}`}
+    iconStyle={{ background: "rgb(var(--surface-2))" }}
+    icon={
+      <div className="flex h-full w-full items-center justify-center">
+        <img
+          src={experience.icon}
+          alt=""
+          loading="lazy"
+          className="h-[62%] w-[62%] rounded-[3px] object-contain"
+        />
+      </div>
+    }
+  >
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+      <h3 className="font-display text-[19px] font-bold leading-tight text-ink">
+        {experience.title}
+      </h3>
+      {experience.current ? (
+        <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-readout text-signal">
+          <span className="h-1 w-1 rounded-full bg-signal" />
+          Current
+        </span>
+      ) : null}
+    </div>
+
+    {experience.website ? (
+      <a
+        href={experience.website}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-1 inline-block font-mono text-[12px] uppercase tracking-readout text-accent transition-opacity hover:opacity-75"
+      >
+        {experience.company_name} ↗
+      </a>
+    ) : (
+      <p className="mt-1 font-mono text-[12px] uppercase tracking-readout text-muted">
+        {experience.company_name}
+      </p>
+    )}
+
+    <ul className="ml-4 mt-4 list-disc space-y-2.5">
+      {experience.points.map((point, i) => (
+        <li
+          key={`${experience.company_name}-point-${i}`}
+          className="pl-1 text-[14px] leading-[1.65] text-muted"
+        >
+          {point}
+        </li>
+      ))}
+    </ul>
+
+    {experience.links?.length ? (
+      <div className="mt-4 flex flex-wrap gap-2">
+        {experience.links.map((link) => (
+          <a
+            key={link.href}
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-chip border border-line/15 px-2.5 py-1 font-mono text-[10px] uppercase tracking-readout text-muted transition-colors hover:border-accent hover:text-accent"
+          >
+            {link.label} ↗
+          </a>
+        ))}
+      </div>
+    ) : null}
+  </VerticalTimelineElement>
+);
+
+ExperienceCard.propTypes = {
+  experience: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    company_name: PropTypes.string.isRequired,
+    icon: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+    location: PropTypes.string,
+    current: PropTypes.bool,
+    website: PropTypes.string,
+    points: PropTypes.arrayOf(PropTypes.string).isRequired,
+    links: PropTypes.arrayOf(
+      PropTypes.shape({ label: PropTypes.string, href: PropTypes.string })
+    ),
+  }).isRequired,
+};
+
+const Experience = () => (
+  <>
+    <SectionHeader
+      label="Experience"
+      title="Where I've worked."
+      readout={`${experiences.length} roles · ${currentCount} current`}
+    />
+
+    <div className="mt-12">
+      <VerticalTimeline lineColor="rgb(var(--grid) / 0.14)">
+        {experiences.map((experience) => (
+          <ExperienceCard
+            key={`${experience.company_name}-${experience.date}`}
+            experience={experience}
           />
-        </div>
-      }
-    >
-      <div>
-        <h3
-          className={`${darkMode ? "text-white" : "text-gray-900"} text-[24px] font-bold`}
-        >
-          {experience.title}
-        </h3>
-        <p
-          className={`${darkMode ? "text-secondary" : "text-gray-600"} text-[16px] font-semibold`}
-          style={{ margin: 0 }}
-        >
-          {experience.website ? (
-            <a
-              href={experience.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`${
-                darkMode
-                  ? "text-blue-400 hover:text-blue-300"
-                  : "text-blue-600 hover:text-blue-800"
-              } hover:underline transition-colors duration-200`}
-            >
-              {experience.company_name}
-            </a>
-          ) : (
-            experience.company_name
-          )}
-        </p>
-      </div>
-      <ul className="mt-5 list-disc ml-5 space-y-2">
-        {experience.points.map((point, index) => {
-          if (point === "<divider/>") {
-            return (
-              <div
-                key={`divider-${index}`}
-                className={`my-3 border-t ${darkMode ? "border-gray-600" : "border-gray-300"} w-full mx-auto`}
-                style={{ listStyle: "none" }}
-              />
-            );
-          }
-          return (
-            <li
-              key={`experience-point-${index}`}
-              className={`${darkMode ? "text-white-100" : "text-gray-700"} text-[14px] pl-1 tracking-wider`}
-            >
-              {point}
-            </li>
-          );
-        })}
-      </ul>
-    </VerticalTimelineElement>
-  );
-};
-
-const Experience = () => {
-  return (
-    <>
-      <motion.div variants={textVariant()}>
-        <p className={styles.sectionSubText}>What I have done so far</p>
-        <h2 className={styles.sectionHeadText}>Experience.</h2>
-      </motion.div>
-      <div className="mt-20 flex flex-col">
-        <VerticalTimeline>
-          {experiences.map((experience, index) => (
-            <ExperienceCard key={index} experience={experience} />
-          ))}
-        </VerticalTimeline>
-      </div>
-    </>
-  );
-};
+        ))}
+      </VerticalTimeline>
+    </div>
+  </>
+);
 
 export default SectionWrapper(Experience, "work");

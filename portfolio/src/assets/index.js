@@ -1,91 +1,53 @@
+// Barrel for every image used by the site. Vite resolves these at build time,
+// so an entry here that points at a missing file breaks the whole build.
+
 import logo from "./logo.svg";
-import blackscholes from "./blackscholesimage.png";
-import backend from "./backend.png";
-import creator from "./creator.png";
-import mobile from "./mobile.png";
-import web from "./web.png";
 import github from "./github.png";
-import menu from "./menu.svg";
-import imagerender from "./imagerender.png";
-import close from "./close.svg";
-import tutor from "./company/tutor.png";
-import ecommerce from "./ecommerce.png";
-import css from "./tech/css.png";
-import docker from "./tech/docker.png";
-import figma from "./tech/figma.png";
-import git from "./tech/git.png";
-import html from "./tech/html.png";
-import javascript from "./tech/javascript.png";
-import mongodb from "./tech/mongodb.png";
-import nodejs from "./tech/nodejs.png";
-import reactjs from "./tech/reactjs.png";
-import redux from "./tech/redux.png";
-import tailwind from "./tech/tailwind.png";
-import typescript from "./tech/typescript.png";
-import threejs from "./tech/threejs.svg";
-
-import meta from "./company/meta.png";
-import shopify from "./company/shopify.png";
-import starbucks from "./company/starbucks.png";
-import tesla from "./company/tesla.png";
-
-import van from "./van.png";
-import vigilai from "./vigilai.png";
-import carrent from "./carrent.png";
-import streamerstakes from "./streamerstakes.png";
-import ds3 from "./ds3.png";
-import tse from "./tse.png";
-import jobit from "./jobit.png";
-import tripguide from "./tripguide.png";
-import ucsdlogo from "./ucsdlogo.png";
-import hemut from "./hemut.png";
-import evgo from "./evgo.png";
 import analytics_icon from "./analytics_icon.png";
 import github_icon from "./github_icon.png";
 import linkedin_icon from "./linkedin_icon.png";
 
+// Company / org marks for the experience timeline.
+import ds3 from "./ds3.png";
+import evgo from "./evgo.png";
+import hemut from "./hemut.png";
+import tse from "./tse.png";
+import ucsdlogo from "./ucsdlogo.png";
+import narvar from "./company/narvar.svg";
+import salk from "./company/salk.svg";
+
+// Project covers. The seven SVGs are hand-authored abstract plots of what each
+// project actually does; the two PNGs are screenshots from the older projects.
+import chainsense from "./projects/chainsense.svg";
+import talentlens from "./projects/talentlens.svg";
+import nextup from "./projects/nextup.svg";
+import evocharge from "./projects/evocharge.svg";
+import keysofparkinsons from "./projects/keysofparkinsons.svg";
+import cred from "./projects/cred.svg";
+import spayla from "./projects/spayla.svg";
+import van from "./van.png";
+import ecommerce from "./ecommerce.png";
+
 export {
-  tse,
-  ds3,
-  streamerstakes,
-  ucsdlogo,
   logo,
-  vigilai,
-  van,
-  tutor,
-  backend,
-  creator,
-  mobile,
-  web,
   github,
-  imagerender,
-  menu,
-  ecommerce,
-  close,
-  css,
-  docker,
-  figma,
-  git,
-  html,
-  javascript,
-  mongodb,
-  nodejs,
-  reactjs,
-  redux,
-  tailwind,
-  evgo,
-  typescript,
-  threejs,
-  meta,
-  shopify,
-  starbucks,
-  tesla,
-  carrent,
-  jobit,
-  tripguide,
-  blackscholes,
-  hemut,
   analytics_icon,
   github_icon,
   linkedin_icon,
+  ds3,
+  evgo,
+  hemut,
+  tse,
+  ucsdlogo,
+  narvar,
+  salk,
+  chainsense,
+  talentlens,
+  nextup,
+  evocharge,
+  keysofparkinsons,
+  cred,
+  spayla,
+  van,
+  ecommerce,
 };

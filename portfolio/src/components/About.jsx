@@ -1,43 +1,95 @@
-/* eslint-disable react/no-unknown-property */
-import React from 'react'
-import {Tilt} from "react-tilt"
-import { motion } from "framer-motion"
-import {styles} from "../styles"
-import {services } from "../constants"
-import {fadeIn, textVariant} from "../utils/motion"
-import {SectionWrapper} from "../hoc"
+import { motion } from "framer-motion";
+import SectionHeader from "./SectionHeader";
+import { SectionWrapper } from "../hoc";
+import { fadeIn } from "../utils/motion";
+import { focusAreas } from "../constants";
+import { coursework, courseCount } from "../constants/coursework";
 
-const ServiceCard = ({index, title, icon}) => {
-  return (
-    <Tilt className="xs:w-[250px] w-full">
-      <motion.div variants={fadeIn("right", "spring", 0.5 * index, 0.75)} className="w-full green-pink-gradient p-[1px] rounded-[20px] shadow-card">
-        <div options={{max: 45, scale: 1, speed: 450}} className="bg-tertiary rounded-[20px] py-5 px-12 min-h-[280px] flex justify-evenly items-center flex-col">
-          <img src={icon} alt={title} className="w-16 h-16 object-contain"/>
-          <h3 className="text-white text-[20px] font-bold text-center">{title}</h3>
+const About = () => (
+  <>
+    <SectionHeader
+      label="About"
+      title="Overview."
+      readout={`${courseCount} courses`}
+    />
+
+    <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-16">
+      <motion.div variants={fadeIn("", "", 0.1, 0.8)}>
+        <p className="max-w-2xl text-[17px] leading-[1.75] text-muted">
+          I work at the seam between data engineering and machine learning. At
+          the{" "}
+          <span className="font-medium text-ink">Salk Institute</span> I train
+          and evaluate U-Net keypoint-estimation models in PyTorch, and I care a
+          lot about whether the metric reporting the result is actually
+          calibrated. At{" "}
+          <span className="font-medium text-ink">Narvar</span> and{" "}
+          <span className="font-medium text-ink">EVgo</span> I built the
+          pipelines underneath the analysis — Airflow into BigQuery, Snowflake
+          into S3 — and the semantic layers that let other people answer their
+          own questions.
+        </p>
+        <p className="mt-5 max-w-2xl text-[17px] leading-[1.75] text-muted">
+          The thread through all of it is instrumentation: shipping systems that
+          report honestly on how well they work. This site is built the same
+          way — the plot above is its own commit history, and{" "}
+          <a
+            href="/analytics"
+            className="text-accent underline decoration-accent/35 underline-offset-4 transition-colors hover:decoration-accent"
+          >
+            the analytics page
+          </a>{" "}
+          takes that apart properly.
+        </p>
+
+        <ul className="mt-8 flex flex-wrap gap-2">
+          {focusAreas.map((area) => (
+            <li
+              key={area}
+              className="rounded-chip border border-line/15 bg-surface px-3 py-1.5 font-mono text-[11px] uppercase tracking-readout text-muted"
+            >
+              {area}
+            </li>
+          ))}
+        </ul>
+      </motion.div>
+
+      {/* Coursework as a dept-grouped table. Was a single run-on paragraph. */}
+      <motion.div variants={fadeIn("left", "tween", 0.2, 0.8)}>
+        <div className="flex items-center gap-4">
+          <span className="readout">Relevant coursework</span>
+          <span className="panel-rule" aria-hidden="true" />
+        </div>
+
+        <div className="mt-5 space-y-6">
+          {coursework.map((group) => (
+            <div key={group.dept}>
+              <div className="flex items-baseline gap-2.5">
+                <span className="font-mono text-[12px] font-medium tracking-readout text-accent">
+                  {group.dept}
+                </span>
+                <span className="text-[12px] text-muted/70">{group.label}</span>
+              </div>
+              <ul className="mt-2 divide-y divide-line/[0.08]">
+                {group.courses.map((course) => (
+                  <li
+                    key={course.code}
+                    className="flex items-baseline gap-3 py-1.5"
+                  >
+                    <span className="readout-num w-[52px] shrink-0 text-[12px] text-muted">
+                      {course.code}
+                    </span>
+                    <span className="text-[14px] leading-snug text-ink/85">
+                      {course.title}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </motion.div>
-    </Tilt>
-  )
-}
+    </div>
+  </>
+);
 
-const About = () => {
-  return (
-    <p>
-      <motion.div variants={textVariant()}>
-        <p className={styles.sectionSubText}>Introduction</p>
-        <h2 className={styles.sectionHeadText}>Overview.</h2>
-      </motion.div>
-      <motion.p variants={fadeIn("", "", 0.1, 1)} className="mt-4 text-secondary text-[17px] max-w-3xl leading-[30px]">
-        I am a sophomore at UC San Diego, majoring in Data Science with concentrations in Mathematics and Cognitive Science. I specialize in machine learning, neural networks, and full-stack development. I am passionate about leveraging data to drive insights and solutions. With hands-on experience in developing machine learning models and neural networks, alongside a robust background in full-stack development, I am eager to gain internships and work experience in data-related roles to further hone my skills and contribute to innovative projects.
-      </motion.p>
-      <p className="mt-5">
-        Relavent Coursework: <span className={styles.courseName}>COGS 9</span>: Introduction to Data Science, <span className={styles.courseName}>DSC 10</span>: Principles of Data Science (Python, Pandas), <span className={styles.courseName}>DSC 20</span>: Programming/Data Structures (Python), <span className={styles.courseName}>MATH 18</span>: Linear Algebra, <span className={styles.courseName}>DSC 30</span>: Data Structures and Algorithms (Java), <span className={styles.courseName}>DCS 40A</span>: Theoretical Foundations of Data Science I, <span className={styles.courseName}>DSC 40B</span>: Theoretical Foundations of Data Science II, <span className={styles.courseName}>DSC 80</span>: Practice of Data Science (Python, Pandas), <span className={styles.courseName}>DSC 100</span>: Introduction to Data Management (SQL, System Design), <span className={styles.courseName}>MATH 180A</span>: Introduction to Probability, <span className={styles.courseName}>MATH 189</span>: Exploratory Data Analysis and Inference (R), <span className={styles.courseName}>DSC 102</span>: Systems for Scalable Analytics (Hadoop, Spark), <span className={styles.courseName}>DSC 140A</span>: Probabilistic Modeling and Machine Learning
-      </p>
-      <div className="mt-20 flex flex-wrap gap-10">
-        {services.map((service, index) => (<ServiceCard key={service.title} index={index} {...service} />))}
-      </div>
-    </p>
-  )
-}
-
-export default SectionWrapper(About, "about")
+export default SectionWrapper(About, "about");

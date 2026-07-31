@@ -1,0 +1,174 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400" role="img" aria-label="UMAP embedding of Ethereum wallet clusters found by HDBSCAN">
+  <rect x="0" y="0" width="640" height="400" fill="#1C1832"/>
+
+  <g stroke="#EDEBF5" stroke-opacity="0.08" stroke-width="1">
+    <line x1="34" y1="30" x2="34" y2="336"/>
+    <line x1="34" y1="336" x2="606" y2="336"/>
+    <line x1="148" y1="30" x2="148" y2="336"/>
+    <line x1="262" y1="30" x2="262" y2="336"/>
+    <line x1="376" y1="30" x2="376" y2="336"/>
+    <line x1="490" y1="30" x2="490" y2="336"/>
+    <line x1="606" y1="30" x2="606" y2="336"/>
+    <line x1="34" y1="30" x2="606" y2="30"/>
+    <line x1="34" y1="107" x2="606" y2="107"/>
+    <line x1="34" y1="183" x2="606" y2="183"/>
+    <line x1="34" y1="260" x2="606" y2="260"/>
+  </g>
+
+  <g stroke="#EDEBF5" stroke-opacity="0.18" stroke-width="1">
+    <line x1="91" y1="336" x2="91" y2="341"/>
+    <line x1="205" y1="336" x2="205" y2="341"/>
+    <line x1="319" y1="336" x2="319" y2="341"/>
+    <line x1="433" y1="336" x2="433" y2="341"/>
+    <line x1="547" y1="336" x2="547" y2="341"/>
+    <line x1="29" y1="69" x2="34" y2="69"/>
+    <line x1="29" y1="145" x2="34" y2="145"/>
+    <line x1="29" y1="222" x2="34" y2="222"/>
+    <line x1="29" y1="298" x2="34" y2="298"/>
+  </g>
+
+  <g fill="#9A94B8" fill-opacity="0.35">
+    <circle cx="240.4" cy="296.9" r="2.8"/>
+    <circle cx="517" cy="72.7" r="2.4"/>
+    <circle cx="377" cy="291.4" r="2.4"/>
+    <circle cx="246.7" cy="136.5" r="2"/>
+    <circle cx="84.9" cy="49.4" r="2"/>
+    <circle cx="304.5" cy="63.1" r="2.4"/>
+    <circle cx="261.9" cy="157.9" r="2"/>
+    <circle cx="475.5" cy="179.3" r="2"/>
+    <circle cx="601.3" cy="87" r="2.8"/>
+    <circle cx="244.5" cy="45.6" r="2"/>
+    <circle cx="266.8" cy="151.7" r="2.8"/>
+    <circle cx="204.6" cy="307.6" r="2.8"/>
+    <circle cx="299.8" cy="42.3" r="2"/>
+    <circle cx="254.1" cy="87.9" r="2.4"/>
+    <circle cx="599.8" cy="300.2" r="2"/>
+    <circle cx="232.1" cy="246.5" r="2.8"/>
+    <circle cx="265.4" cy="285.5" r="2.8"/>
+    <circle cx="251.3" cy="259.1" r="2.8"/>
+    <circle cx="42" cy="248.1" r="2"/>
+    <circle cx="99.9" cy="331.2" r="2"/>
+    <circle cx="195" cy="161.8" r="2.8"/>
+    <circle cx="162.3" cy="184.9" r="2.4"/>
+    <circle cx="57.2" cy="291.7" r="2.4"/>
+    <circle cx="487.9" cy="324.3" r="2.8"/>
+    <circle cx="93.8" cy="217.8" r="2.8"/>
+    <circle cx="464.7" cy="213.4" r="2.8"/>
+    <circle cx="498.7" cy="118.3" r="2.8"/>
+    <circle cx="85.8" cy="152.3" r="2"/>
+    <circle cx="550.9" cy="245.5" r="2"/>
+    <circle cx="418.7" cy="89.6" r="2"/>
+  </g>
+
+  <g fill="#440154">
+    <circle cx="95.9" cy="199.1" r="3"/>
+    <circle cx="106.6" cy="242.9" r="3.5"/>
+    <circle cx="89.3" cy="259.1" r="2.5"/>
+    <circle cx="85.5" cy="238" r="3.5"/>
+    <circle cx="92.7" cy="247.6" r="4"/>
+    <circle cx="76.9" cy="240.4" r="3"/>
+    <circle cx="119" cy="262.2" r="3"/>
+    <circle cx="113.1" cy="273.2" r="3"/>
+    <circle cx="100.8" cy="253.3" r="4"/>
+    <circle cx="124" cy="217.6" r="3.5"/>
+    <circle cx="81.3" cy="246.4" r="2.5"/>
+    <circle cx="112.6" cy="235.4" r="2.5"/>
+    <circle cx="127.7" cy="238.9" r="3"/>
+    <circle cx="97.3" cy="261.6" r="2.5"/>
+    <circle cx="109.2" cy="261.6" r="3.5"/>
+  </g>
+  <g fill="#3B528B">
+    <circle cx="195.6" cy="91.4" r="3"/>
+    <circle cx="169" cy="152" r="3.5"/>
+    <circle cx="179.8" cy="130.4" r="3.5"/>
+    <circle cx="154.8" cy="132.3" r="3"/>
+    <circle cx="207.5" cy="150.6" r="3.5"/>
+    <circle cx="208.7" cy="118.5" r="3.5"/>
+    <circle cx="211.7" cy="83.3" r="3"/>
+    <circle cx="193.8" cy="159.1" r="2.5"/>
+    <circle cx="218.2" cy="100" r="2.5"/>
+    <circle cx="167.5" cy="100.7" r="4"/>
+    <circle cx="222.4" cy="106" r="3.5"/>
+    <circle cx="188.4" cy="109.8" r="2.5"/>
+    <circle cx="201.1" cy="82.8" r="3"/>
+    <circle cx="194.2" cy="114.5" r="2.5"/>
+    <circle cx="155.5" cy="155.8" r="4"/>
+    <circle cx="157.3" cy="120.7" r="3"/>
+    <circle cx="189.6" cy="93.9" r="3"/>
+    <circle cx="198.9" cy="104.8" r="3.5"/>
+    <circle cx="200.1" cy="132.3" r="3"/>
+  </g>
+  <g fill="#21918C">
+    <circle cx="264.1" cy="264.8" r="2.5"/>
+    <circle cx="313.1" cy="231.6" r="3"/>
+    <circle cx="314.7" cy="307.8" r="3"/>
+    <circle cx="272.5" cy="285.5" r="3"/>
+    <circle cx="304.8" cy="223.5" r="2.5"/>
+    <circle cx="314.8" cy="243.1" r="2.5"/>
+    <circle cx="328.5" cy="262.4" r="3"/>
+    <circle cx="318.2" cy="258.6" r="3"/>
+    <circle cx="304.6" cy="245.7" r="3"/>
+    <circle cx="337.4" cy="275.6" r="2.5"/>
+    <circle cx="348.6" cy="231.9" r="2.5"/>
+    <circle cx="304.6" cy="216.3" r="3.5"/>
+    <circle cx="331.7" cy="251" r="3.5"/>
+    <circle cx="315.4" cy="242.5" r="2.5"/>
+    <circle cx="304.5" cy="228.9" r="2.5"/>
+    <circle cx="335" cy="224.1" r="3"/>
+    <circle cx="303.6" cy="227.1" r="2.5"/>
+    <circle cx="354.5" cy="281.8" r="3"/>
+  </g>
+  <g fill="#5EC962">
+    <circle cx="415.5" cy="133.5" r="3"/>
+    <circle cx="440.7" cy="149.6" r="3"/>
+    <circle cx="454.6" cy="119.2" r="2.5"/>
+    <circle cx="455.7" cy="130.6" r="2.5"/>
+    <circle cx="382.1" cy="158.4" r="2.5"/>
+    <circle cx="397.7" cy="125.2" r="4"/>
+    <circle cx="380.2" cy="139" r="3"/>
+    <circle cx="431.5" cy="179.4" r="3.5"/>
+    <circle cx="393.8" cy="140" r="3"/>
+    <circle cx="374" cy="182.7" r="2.5"/>
+    <circle cx="405" cy="151.7" r="3.5"/>
+    <circle cx="425.2" cy="164.4" r="3"/>
+    <circle cx="409.6" cy="124.4" r="3.5"/>
+    <circle cx="429.7" cy="151.9" r="3.5"/>
+    <circle cx="390.4" cy="154.5" r="2.5"/>
+    <circle cx="457" cy="140.4" r="3"/>
+    <circle cx="417.4" cy="150.5" r="3"/>
+  </g>
+  <g fill="#440154">
+    <circle cx="463.8" cy="266.6" r="4"/>
+    <circle cx="457.6" cy="281.7" r="3"/>
+    <circle cx="463.6" cy="304.2" r="2.5"/>
+    <circle cx="497.7" cy="295.1" r="2.5"/>
+    <circle cx="480.8" cy="295.2" r="2.5"/>
+    <circle cx="478.3" cy="292.1" r="2.5"/>
+    <circle cx="506.4" cy="278.2" r="3.5"/>
+    <circle cx="479.9" cy="286.6" r="4"/>
+    <circle cx="461.9" cy="305.5" r="2.5"/>
+    <circle cx="507" cy="295.7" r="2.5"/>
+    <circle cx="433.4" cy="313.1" r="3"/>
+  </g>
+
+  <g stroke="#FDE725" stroke-opacity="0.28" stroke-width="1" fill="none" stroke-dasharray="5 5">
+    <ellipse cx="560" cy="84" rx="42" ry="38"/>
+  </g>
+  <g fill="#FDE725">
+    <circle cx="542.1" cy="100.2" r="4"/>
+    <circle cx="564.9" cy="64" r="3.5"/>
+    <circle cx="566" cy="106.3" r="3.5"/>
+    <circle cx="552.8" cy="110" r="3.5"/>
+    <circle cx="557.4" cy="60" r="3.5"/>
+    <circle cx="582.2" cy="59.2" r="2.5"/>
+    <circle cx="571.3" cy="97.6" r="3"/>
+    <circle cx="543.6" cy="59.5" r="3.5"/>
+    <circle cx="539.9" cy="69" r="3.5"/>
+    <circle cx="539.8" cy="81.2" r="3"/>
+    <circle cx="595.1" cy="91.2" r="2.5"/>
+    <circle cx="539.5" cy="85.2" r="3"/>
+  </g>
+
+  <text x="34" y="371" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="1.6" fill="#9A94B8">UMAP &#183; HDBSCAN</text>
+  <text x="606" y="371" text-anchor="end" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" letter-spacing="1.6" fill="#9A94B8">6.3M WALLETS</text>
+</svg>

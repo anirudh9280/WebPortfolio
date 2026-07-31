@@ -2,11 +2,36 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="./src/assets/logo.svg"/>
+    <link rel="icon" type="image/svg+xml" href="./src/assets/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Anirudh | Portfolio</title>
+    <title>Anirudh Annabathula — Data Science</title>
+    <meta
+      name="description"
+      content="Anirudh Annabathula — data science senior at UC San Diego. Computer vision research at the Salk Institute, data engineering at Narvar and EVgo."
+    />
+    <meta name="theme-color" content="#131024" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#FAFAF8" media="(prefers-color-scheme: light)" />
   </head>
   <body>
+    <!--
+      Must be the FIRST child of <body>, not in <head> -- document.body is null
+      during head parsing and the theme classes live on body. Vite's stylesheet
+      link is render-blocking in <head>, so the token block is already applied
+      when this runs and the correct background paints on the very first frame.
+    -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem("darkMode");
+          var dark =
+            saved !== null
+              ? saved === "true"
+              : window.matchMedia("(prefers-color-scheme: dark)").matches;
+          document.body.classList.add(dark ? "dark-mode" : "light-mode");
+          document.documentElement.style.colorScheme = dark ? "dark" : "light";
+        } catch (e) {}
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

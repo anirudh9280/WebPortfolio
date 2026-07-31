@@ -1,84 +1,44 @@
-import React from "react";
 import { Link } from "react-router-dom";
-import { useTheme } from "../context/ThemeContext";
-import { github_icon, linkedin_icon, analytics_icon } from "../assets";
 
-const Footer = () => {
-  const { darkMode } = useTheme();
+const LINKS = [
+  { label: "GitHub", href: "https://github.com/anirudh9280" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/anirudha9" },
+  { label: "Email", href: "mailto:anirudh.annabathula@gmail.com" },
+];
 
-  return (
-    <footer
-      className={`mt-16 py-8 ${darkMode ? "bg-black-100" : "bg-gray-50"} border-t ${darkMode ? "border-gray-700" : "border-gray-200"}`}
-    >
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Divider line */}
-        <div
-          className={`w-full h-px ${darkMode ? "bg-gray-600" : "bg-gray-300"} mb-8`}
-        />
-
-        {/* Social Icons */}
-        <div className="flex justify-center items-center gap-8 mb-6">
-          <a
-            href="https://github.com/anirudh9280"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`w-12 h-12 rounded-full border-2 ${
-              darkMode
-                ? "border-gray-600 hover:border-white"
-                : "border-gray-300 hover:border-gray-600"
-            } flex items-center justify-center transition-all duration-300 hover:scale-110`}
-          >
-            <img
-              src={github_icon}
-              alt="GitHub"
-              className={`w-6 h-6 object-contain ${darkMode ? "invert" : ""}`}
-            />
-          </a>
-
-          <a
-            href="https://www.linkedin.com/in/anirudha9/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`w-12 h-12 rounded-full border-2 ${
-              darkMode
-                ? "border-gray-600 hover:border-blue-400"
-                : "border-gray-300 hover:border-blue-600"
-            } flex items-center justify-center transition-all duration-300 hover:scale-110`}
-          >
-            <img
-              src={linkedin_icon}
-              alt="LinkedIn"
-              className={`w-6 h-6 object-contain ${darkMode ? "invert" : ""}`}
-            />
-          </a>
-
-          <Link
-            to="/analytics"
-            className={`w-12 h-12 rounded-full border-2 ${
-              darkMode
-                ? "border-gray-600 hover:border-green-400"
-                : "border-gray-300 hover:border-green-600"
-            } flex items-center justify-center transition-all duration-300 hover:scale-110`}
-          >
-            <img
-              src={analytics_icon}
-              alt="Analytics"
-              className={`w-6 h-6 object-contain ${darkMode ? "invert" : ""}`}
-            />
-          </Link>
-        </div>
-
-        {/* Copyright Text */}
-        <div className="text-center">
-          <p
-            className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}
-          >
-            © 2025 Anirudh Annabathula. All rights reserved.
-          </p>
-        </div>
+const Footer = () => (
+  <footer className="border-t border-line/10">
+    <div className="mx-auto flex max-w-7xl flex-col gap-6 px-6 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-16">
+      <div>
+        <p className="font-display text-[15px] font-bold text-ink">
+          Anirudh Annabathula
+        </p>
+        <p className="readout mt-1.5">
+          UC San Diego · Data Science · Class of 2027
+        </p>
       </div>
-    </footer>
-  );
-};
+
+      <nav className="flex flex-wrap items-center gap-x-6 gap-y-3">
+        {LINKS.map((link) => (
+          <a
+            key={link.label}
+            href={link.href}
+            target={link.href.startsWith("http") ? "_blank" : undefined}
+            rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
+            className="font-mono text-[11px] uppercase tracking-readout text-muted transition-colors hover:text-accent"
+          >
+            {link.label} ↗
+          </a>
+        ))}
+        <Link
+          to="/analytics"
+          className="font-mono text-[11px] uppercase tracking-readout text-muted transition-colors hover:text-accent"
+        >
+          Site analytics
+        </Link>
+      </nav>
+    </div>
+  </footer>
+);
 
 export default Footer;

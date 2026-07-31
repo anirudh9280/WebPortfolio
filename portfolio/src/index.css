@@ -1,132 +1,382 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+/* Self-hosted so there is no third-party request and no FOUT on Hostinger. */
+@import "@fontsource/space-grotesk/500.css";
+@import "@fontsource/space-grotesk/700.css";
+@import "@fontsource/ibm-plex-sans/400.css";
+@import "@fontsource/ibm-plex-sans/500.css";
+@import "@fontsource/ibm-plex-sans/600.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================================
+   DESIGN TOKENS
+
+   Palette is derived from viridis, the matplotlib default colormap -- native
+   to the subject rather than decorative. Teal is the workhorse accent, yellow
+   is a rare "live/now" signal, indigo carries plot marks.
+
+   Values are space-separated RGB triples so Tailwind's
+   rgb(var(--token) / <alpha-value>) keeps opacity utilities working.
+   ========================================================================= */
+
+.dark-mode {
+  --ground: 19 16 36; /* #131024 violet-ink, deliberately not near-black */
+  --surface: 28 24 50; /* #1C1832 */
+  --surface-2: 36 31 66; /* #241F42 */
+  --ink: 237 235 245; /* #EDEBF5 */
+  --muted: 154 148 184; /* #9A94B8 */
+  --accent: 44 195 181; /* #2CC3B5  8.5:1 on ground */
+  --accent-soft: 26 58 60;
+  --signal: 253 231 37; /* #FDE725 viridis yellow */
+  --series: 92 127 209; /* #5C7FD1 */
+  --grid: 237 235 245;
+  --shadow: 0 0 0;
+  --loader-rgb: 237, 235, 245;
+
+  background-color: rgb(var(--ground));
+  color: rgb(var(--ink));
+}
+
+.light-mode {
+  --ground: 250 250 248; /* #FAFAF8 bone, warm but not cream */
+  --surface: 255 255 255;
+  --surface-2: 243 243 240;
+  --ink: 23 21 40; /* #171528 */
+  --muted: 92 86 116; /* #5C5674 */
+  --accent: 23 126 121; /* #177E79  4.7:1 on ground */
+  --accent-soft: 224 242 240;
+  --signal: 122 109 0; /* #7A6D00  5.1:1 on ground */
+  --series: 59 82 139; /* #3B528B */
+  --grid: 23 21 40;
+  --shadow: 23 21 40;
+  --loader-rgb: 23, 21, 40;
+
+  background-color: rgb(var(--ground));
+  color: rgb(var(--ink));
+}
+
+/* ============================================================================
+   BASE
+   ========================================================================= */
+
 * {
+  /* Tailwind preflight only zeroes a specific element list. Dropping padding
+     here restores the browser's 40px padding-inline-start on <ul>.
+     Deliberately NO transition here -- see .theme-transition below. */
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+}
+
+body {
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+html {
   scroll-behavior: smooth;
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease,
-    border-color 0.3s ease,
-    box-shadow 0.3s ease;
 }
 
-.dark-mode * {
-  color-scheme: dark;
-}
-
-.light-mode * {
-  color-scheme: light;
-}
-
+/* Offsets fragment targets past the fixed navbar. */
 .hash-span {
   margin-top: -100px;
   padding-bottom: 100px;
   display: block;
 }
 
-.black-gradient {
-  background: #000000; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to right,
-    #434343,
-    #000000
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to right,
-    #434343,
-    #000000
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+::selection {
+  background: rgb(var(--accent) / 0.28);
 }
 
-.violet-gradient {
-  background: #804dee;
-  background: linear-gradient(-90deg, #804dee 0%, rgba(60, 51, 80, 0) 100%);
-  background: -webkit-linear-gradient(
-    -90deg,
-    #804dee 0%,
-    rgba(60, 51, 80, 0) 100%
+:focus-visible {
+  outline: 2px solid rgb(var(--accent));
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ============================================================================
+   THEME SWAP
+
+   Applied to <html> by toggleTheme() for ~350ms, then removed. Replaces the
+   old permanent `* { transition: ... }`, which put four non-composited
+   properties on every node in the tree and was a measurable scroll-jank
+   source. Same visual result on toggle, zero bookkeeping the rest of the time.
+   The !important is justified because the class only exists for 350ms and
+   must beat per-element transition-* utilities during that window.
+   ========================================================================= */
+
+.theme-transition,
+.theme-transition *,
+.theme-transition *::before,
+.theme-transition *::after {
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    fill 0.3s ease,
+    box-shadow 0.3s ease !important;
+  transition-delay: 0s !important;
+}
+
+/* ============================================================================
+   INSTRUMENT PRIMITIVES
+
+   The vernacular of the design: axis rails, tick marks, readouts. Instrument
+   vernacular only -- no fake terminal chrome, no blinking cursors, no prompts.
+   ========================================================================= */
+
+/* Monospace label used for every metric, date, count and axis tick. */
+.readout {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgb(var(--muted));
+}
+
+.readout-num {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* Section header: label ——————————— readout */
+.panel-rule {
+  flex: 1;
+  height: 1px;
+  background: rgb(var(--grid) / 0.16);
+}
+
+.panel {
+  background: rgb(var(--surface));
+  border: 1px solid rgb(var(--grid) / 0.12);
+  border-radius: 4px;
+}
+
+/* The signature element: a hairline y-axis pinned to the left edge, whose
+   ticks mark real section positions. Hidden below lg where there is no gutter. */
+.axis-rail {
+  position: fixed;
+  left: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 15;
+  display: none;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  pointer-events: none;
+}
+
+@media (min-width: 1180px) {
+  .axis-rail {
+    display: flex;
+  }
+}
+
+.axis-rail-line {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgb(var(--grid) / 0.18);
+}
+
+.axis-tick {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  pointer-events: auto;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.axis-tick-mark {
+  width: 11px;
+  height: 1px;
+  background: rgb(var(--grid) / 0.35);
+  transition:
+    width 0.25s ease,
+    background-color 0.25s ease;
+}
+
+.axis-tick-label {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgb(var(--muted));
+  opacity: 0.55;
+  transition:
+    opacity 0.25s ease,
+    color 0.25s ease;
+  white-space: nowrap;
+}
+
+.axis-tick:hover .axis-tick-label,
+.axis-tick[aria-current="true"] .axis-tick-label {
+  opacity: 1;
+  color: rgb(var(--accent));
+}
+
+.axis-tick:hover .axis-tick-mark,
+.axis-tick[aria-current="true"] .axis-tick-mark {
+  width: 22px;
+  background: rgb(var(--accent));
+}
+
+/* ============================================================================
+   SKILLS MARQUEE
+
+   CSS keyframes on transform so the animation lives on the compositor thread.
+   See SkillsMarquee.jsx for the seam math (w-max track, gap on the group).
+   ========================================================================= */
+
+.marquee-viewport {
+  /* Background-agnostic edge fade -- an overlay div would need to know the
+     exact page background and would seam the moment it changed. */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 8%,
+    #000 92%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 8%,
+    #000 92%,
+    transparent 100%
   );
 }
 
-.green-pink-gradient {
-  background: "#00cea8";
-  background: linear-gradient(90.13deg, #00cea8 1.9%, #bf61ff 97.5%);
-  background: -webkit-linear-gradient(-90.13deg, #00cea8 1.9%, #bf61ff 97.5%);
+/* Promote ONLY the two tracks. will-change on the ~96 chips would create that
+   many compositor layers and exhaust GPU memory on mobile. */
+.marquee-track {
+  will-change: transform;
 }
 
-.orange-text-gradient {
-  background: #f12711; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to top,
-    #f12711,
-    #f5af19
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to top,
-    #f12711,
-    #f5af19
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.marquee-track.is-paused,
+.marquee-viewport:hover .marquee-track,
+.marquee-viewport:focus-within .marquee-track {
+  animation-play-state: paused;
 }
 
-.green-text-gradient {
-  background: #11998e; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to top,
-    #11998e,
-    #38ef7d
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to top,
-    #11998e,
-    #38ef7d
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.skill-chip {
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
 }
 
-.blue-text-gradient {
-  /* background: -webkit-linear-gradient(#eee, #333); */
-  background: #56ccf2; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to top,
-    #2f80ed,
-    #56ccf2
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to top,
-    #2f80ed,
-    #56ccf2
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* Not scale: a scale transform inside a compositor-animated parent forces the
+   parent layer to repaint. The marquee is already paused on hover anyway. */
+.skill-chip:hover {
+  transform: translateY(-2px);
+  border-color: rgb(var(--accent) / 0.55);
 }
 
-.pink-text-gradient {
-  background: #ec008c; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to top,
-    #ec008c,
-    #fc6767
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to top,
-    #ec008c,
-    #fc6767
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* ============================================================================
+   PROJECT + TIMELINE SURFACES
+   ========================================================================= */
+
+.project-card {
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
-/* canvas- styles */
+.project-card:hover {
+  transform: translateY(-3px);
+  border-color: rgb(var(--accent) / 0.45);
+}
+
+.project-card__cover img {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.project-card:hover .project-card__cover img {
+  transform: scale(1.035);
+}
+
+/* react-vertical-timeline overrides, driven by tokens instead of two
+   hardcoded colour sets. */
+.vertical-timeline::before {
+  background: rgb(var(--grid) / 0.14) !important;
+}
+
+.vertical-timeline-element-content {
+  background: rgb(var(--surface)) !important;
+  border: 1px solid rgb(var(--grid) / 0.12) !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+  padding: 1.5rem !important;
+}
+
+.vertical-timeline-element-content-arrow {
+  border-right-color: rgb(var(--grid) / 0.14) !important;
+}
+
+.vertical-timeline-element-icon {
+  box-shadow: 0 0 0 3px rgb(var(--grid) / 0.12) !important;
+}
+
+.vertical-timeline-element-date {
+  font-family: "IBM Plex Mono", ui-monospace, monospace !important;
+  font-size: 11px !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: rgb(var(--muted)) !important;
+  opacity: 1 !important;
+}
+
+/* ============================================================================
+   NAVBAR
+   ========================================================================= */
+
+.nav-link {
+  position: relative;
+}
+
+.nav-link::before {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: rgb(var(--accent));
+  transition: width 0.3s ease-out;
+}
+
+.nav-link:hover::before,
+.nav-link.active::before {
+  width: 100%;
+}
+
+.hamburger-line {
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+/* ============================================================================
+   CANVAS LOADER
+
+   Was hardcoded white, so it was invisible on the light background during a
+   multi-second model load. Now driven by --loader-rgb.
+   ========================================================================= */
+
 .canvas-loader {
   font-size: 10px;
   width: 1em;
@@ -138,249 +388,137 @@
   transform: translateZ(0);
 }
 
+.canvas-loader-wrap {
+  color: rgb(var(--ink));
+}
+
 @keyframes mulShdSpin {
   0%,
   100% {
     box-shadow:
-      0em -2.6em 0em 0em #ffffff,
-      1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2),
-      2.5em 0em 0 0em rgba(255, 255, 255, 0.2),
-      1.75em 1.75em 0 0em rgba(255, 255, 255, 0.2),
-      0em 2.5em 0 0em rgba(255, 255, 255, 0.2),
-      -1.8em 1.8em 0 0em rgba(255, 255, 255, 0.2),
-      -2.6em 0em 0 0em rgba(255, 255, 255, 0.5),
-      -1.8em -1.8em 0 0em rgba(255, 255, 255, 0.7);
+      0em -2.6em 0em 0em rgba(var(--loader-rgb), 1),
+      1.8em -1.8em 0 0em rgba(var(--loader-rgb), 0.2),
+      2.5em 0em 0 0em rgba(var(--loader-rgb), 0.2),
+      1.75em 1.75em 0 0em rgba(var(--loader-rgb), 0.2),
+      0em 2.5em 0 0em rgba(var(--loader-rgb), 0.2),
+      -1.8em 1.8em 0 0em rgba(var(--loader-rgb), 0.2),
+      -2.6em 0em 0 0em rgba(var(--loader-rgb), 0.5),
+      -1.8em -1.8em 0 0em rgba(var(--loader-rgb), 0.7);
   }
   12.5% {
     box-shadow:
-      0em -2.6em 0em 0em rgba(255, 255, 255, 0.7),
-      1.8em -1.8em 0 0em #ffffff,
-      2.5em 0em 0 0em rgba(255, 255, 255, 0.2),
-      1.75em 1.75em 0 0em rgba(255, 255, 255, 0.2),
-      0em 2.5em 0 0em rgba(255, 255, 255, 0.2),
-      -1.8em 1.8em 0 0em rgba(255, 255, 255, 0.2),
-      -2.6em 0em 0 0em rgba(255, 255, 255, 0.2),
-      -1.8em -1.8em 0 0em rgba(255, 255, 255, 0.5);
+      0em -2.6em 0em 0em rgba(var(--loader-rgb), 0.7),
+      1.8em -1.8em 0 0em rgba(var(--loader-rgb), 1),
+      2.5em 0em 0 0em rgba(var(--loader-rgb), 0.2),
+      1.75em 1.75em 0 0em rgba(var(--loader-rgb), 0.2),
+      0em 2.5em 0 0em rgba(var(--loader-rgb), 0.2),
+      -1.8em 1.8em 0 0em rgba(var(--loader-rgb), 0.2),
+      -2.6em 0em 0 0em rgba(var(--loader-rgb), 0.2),
+      -1.8em -1.8em 0 0em rgba(var(--loader-rgb), 0.5);
   }
   25% {
     box-shadow:
-      0em -2.6em 0em 0em rgba(255, 255, 255, 0.5),
-      1.8em -1.8em 0 0em rgba(255, 255, 255, 0.7),
-      2.5em 0em 0 0em #ffffff,
-      1.75em 1.75em 0 0em rgba(255, 255, 255, 0.2),
-      0em 2.5em 0 0em rgba(255, 255, 255, 0.2),
-      -1.8em 1.8em 0 0em rgba(255, 255, 255, 0.2),
-      -2.6em 0em 0 0em rgba(255, 255, 255, 0.2),
-      -1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2);
+      0em -2.6em 0em 0em rgba(var(--loader-rgb), 0.5),
+      1.8em -1.8em 0 0em rgba(var(--loader-rgb), 0.7),
+      2.5em 0em 0 0em rgba(var(--loader-rgb), 1),
+      1.75em 1.75em 0 0em rgba(var(--loader-rgb), 0.2),
+      0em 2.5em 0 0em rgba(var(--loader-rgb), 0.2),
+      -1.8em 1.8em 0 0em rgba(var(--loader-rgb), 0.2),
+      -2.6em 0em 0 0em rgba(var(--loader-rgb), 0.2),
+      -1.8em -1.8em 0 0em rgba(var(--loader-rgb), 0.2);
   }
   37.5% {
     box-shadow:
-      0em -2.6em 0em 0em rgba(255, 255, 255, 0.2),
-      1.8em -1.8em 0 0em rgba(255, 255, 255, 0.5),
-      2.5em 0em 0 0em rgba(255, 255, 255, 0.7),
-      1.75em 1.75em 0 0em #ffffff,
-      0em 2.5em 0 0em rgba(255, 255, 255, 0.2),
-      -1.8em 1.8em 0 0em rgba(255, 255, 255, 0.2),
-      -2.6em 0em 0 0em rgba(255, 255, 255, 0.2),
-      -1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2);
+      0em -2.6em 0em 0em rgba(var(--loader-rgb), 0.2),
+      1.8em -1.8em 0 0em rgba(var(--loader-rgb), 0.5),
+      2.5em 0em 0 0em rgba(var(--loader-rgb), 0.7),
+      1.75em 1.75em 0 0em rgba(var(--loader-rgb), 1),
+      0em 2.5em 0 0em rgba(var(--loader-rgb), 0.2),
+      -1.8em 1.8em 0 0em rgba(var(--loader-rgb), 0.2),
+      -2.6em 0em 0 0em rgba(var(--loader-rgb), 0.2),
+      -1.8em -1.8em 0 0em rgba(var(--loader-rgb), 0.2);
   }
   50% {
     box-shadow:
-      0em -2.6em 0em 0em rgba(255, 255, 255, 0.2),
-      1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2),
-      2.5em 0em 0 0em rgba(255, 255, 255, 0.5),
-      1.75em 1.75em 0 0em rgba(255, 255, 255, 0.7),
-      0em 2.5em 0 0em #ffffff,
-      -1.8em 1.8em 0 0em rgba(255, 255, 255, 0.2),
-      -2.6em 0em 0 0em rgba(255, 255, 255, 0.2),
-      -1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2);
+      0em -2.6em 0em 0em rgba(var(--loader-rgb), 0.2),
+      1.8em -1.8em 0 0em rgba(var(--loader-rgb), 0.2),
+      2.5em 0em 0 0em rgba(var(--loader-rgb), 0.5),
+      1.75em 1.75em 0 0em rgba(var(--loader-rgb), 0.7),
+      0em 2.5em 0 0em rgba(var(--loader-rgb), 1),
+      -1.8em 1.8em 0 0em rgba(var(--loader-rgb), 0.2),
+      -2.6em 0em 0 0em rgba(var(--loader-rgb), 0.2),
+      -1.8em -1.8em 0 0em rgba(var(--loader-rgb), 0.2);
   }
   62.5% {
     box-shadow:
-      0em -2.6em 0em 0em rgba(255, 255, 255, 0.2),
-      1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2),
-      2.5em 0em 0 0em rgba(255, 255, 255, 0.2),
-      1.75em 1.75em 0 0em rgba(255, 255, 255, 0.5),
-      0em 2.5em 0 0em rgba(255, 255, 255, 0.7),
-      -1.8em 1.8em 0 0em #ffffff,
-      -2.6em 0em 0 0em rgba(255, 255, 255, 0.2),
-      -1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2);
+      0em -2.6em 0em 0em rgba(var(--loader-rgb), 0.2),
+      1.8em -1.8em 0 0em rgba(var(--loader-rgb), 0.2),
+      2.5em 0em 0 0em rgba(var(--loader-rgb), 0.2),
+      1.75em 1.75em 0 0em rgba(var(--loader-rgb), 0.5),
+      0em 2.5em 0 0em rgba(var(--loader-rgb), 0.7),
+      -1.8em 1.8em 0 0em rgba(var(--loader-rgb), 1),
+      -2.6em 0em 0 0em rgba(var(--loader-rgb), 0.2),
+      -1.8em -1.8em 0 0em rgba(var(--loader-rgb), 0.2);
   }
   75% {
     box-shadow:
-      0em -2.6em 0em 0em rgba(255, 255, 255, 0.2),
-      1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2),
-      2.5em 0em 0 0em rgba(255, 255, 255, 0.2),
-      1.75em 1.75em 0 0em rgba(255, 255, 255, 0.2),
-      0em 2.5em 0 0em rgba(255, 255, 255, 0.5),
-      -1.8em 1.8em 0 0em rgba(255, 255, 255, 0.7),
-      -2.6em 0em 0 0em #ffffff,
-      -1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2);
+      0em -2.6em 0em 0em rgba(var(--loader-rgb), 0.2),
+      1.8em -1.8em 0 0em rgba(var(--loader-rgb), 0.2),
+      2.5em 0em 0 0em rgba(var(--loader-rgb), 0.2),
+      1.75em 1.75em 0 0em rgba(var(--loader-rgb), 0.2),
+      0em 2.5em 0 0em rgba(var(--loader-rgb), 0.5),
+      -1.8em 1.8em 0 0em rgba(var(--loader-rgb), 0.7),
+      -2.6em 0em 0 0em rgba(var(--loader-rgb), 1),
+      -1.8em -1.8em 0 0em rgba(var(--loader-rgb), 0.2);
   }
   87.5% {
     box-shadow:
-      0em -2.6em 0em 0em rgba(255, 255, 255, 0.2),
-      1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2),
-      2.5em 0em 0 0em rgba(255, 255, 255, 0.2),
-      1.75em 1.75em 0 0em rgba(255, 255, 255, 0.2),
-      0em 2.5em 0 0em rgba(255, 255, 255, 0.2),
-      -1.8em 1.8em 0 0em rgba(255, 255, 255, 0.5),
-      -2.6em 0em 0 0em rgba(255, 255, 255, 0.7),
-      -1.8em -1.8em 0 0em #ffffff;
+      0em -2.6em 0em 0em rgba(var(--loader-rgb), 0.2),
+      1.8em -1.8em 0 0em rgba(var(--loader-rgb), 0.2),
+      2.5em 0em 0 0em rgba(var(--loader-rgb), 0.2),
+      1.75em 1.75em 0 0em rgba(var(--loader-rgb), 0.2),
+      0em 2.5em 0 0em rgba(var(--loader-rgb), 0.2),
+      -1.8em 1.8em 0 0em rgba(var(--loader-rgb), 0.5),
+      -2.6em 0em 0 0em rgba(var(--loader-rgb), 0.7),
+      -1.8em -1.8em 0 0em rgba(var(--loader-rgb), 1);
   }
 }
 
-/* Theme Classes */
-.dark-mode {
-  background-color: #050816;
-  color: white;
-}
+/* ============================================================================
+   LEGACY COMPAT
 
-.light-mode {
-  background-color: #f8fafc;
-  color: #0f172a;
-}
+   CommitGraph.jsx (the /analytics D3 page) still uses the old utility names.
+   These keep it readable in both themes until it is fully migrated.
+   ========================================================================= */
 
-/* Section background colors for light mode */
 .light-mode .bg-primary {
-  background-color: #f8fafc;
+  background-color: rgb(var(--ground));
 }
 
 .light-mode .bg-tertiary {
-  background-color: #e2e8f0;
+  background-color: rgb(var(--surface));
 }
 
-.light-mode .black-gradient {
-  background: #f1f5f9;
-}
-
-.light-mode .green-pink-gradient {
-  background: linear-gradient(90.13deg, #0ea5e9 1.9%, #8b5cf6 97.5%);
-}
-
-/* Hero section styles for light mode */
-.light-mode .heroHeadText,
-.light-mode .sectionHeadText {
-  color: #0f172a !important;
-}
-
-.light-mode .heroSubText {
-  color: #1e293b !important;
-  opacity: 0.9;
-}
-
-.light-mode .sectionSubText {
-  color: #334155 !important;
-}
-
-/* Work experience boxes for light mode */
-.light-mode .vertical-timeline-element-content {
-  background-color: #ffffff;
-  border: 1px solid #cbd5e1;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-}
-
-.light-mode .vertical-timeline-element-icon {
-  box-shadow:
-    0 0 0 4px #e2e8f0,
-    inset 0 2px 0 rgba(0, 0, 0, 0.08),
-    0 3px 0 4px rgba(0, 0, 0, 0.05);
-}
-
-/* Project card styles for light mode */
-.light-mode .project-card {
-  background-color: #ffffff;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.1);
-}
-
-.light-mode .card-img_hover {
-  background-color: #f8fafc;
-}
-
-/* Contact section styles for light mode */
-.light-mode .bg-tertiary.rounded-2xl {
-  background-color: #ffffff;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.1);
-}
-
-.light-mode .form input,
-.light-mode .form textarea {
-  background-color: #f1f5f9;
-  color: #0f172a;
-  border: 1px solid #cbd5e1;
-}
-
-.light-mode .form input::placeholder,
-.light-mode .form textarea::placeholder {
-  color: #64748b;
-}
-
-/* Ensure gradient text is still visible in light mode */
-.light-mode .blue-text-gradient,
-.light-mode .green-text-gradient,
-.light-mode .pink-text-gradient,
-.light-mode .orange-text-gradient {
-  background: initial;
-  -webkit-background-clip: initial;
-  -webkit-text-fill-color: initial;
-}
-
-.light-mode .blue-text-gradient {
-  color: #2563eb;
-}
-
-.light-mode .green-text-gradient {
-  color: #059669;
-}
-
-.light-mode .pink-text-gradient {
-  color: #db2777;
-}
-
-.light-mode .orange-text-gradient {
-  color: #ea580c;
-}
-
-/* Text colors for light mode */
 .light-mode .text-secondary {
-  color: #64748b;
+  color: rgb(var(--muted));
 }
 
+/* Load-bearing: this is the only thing turning legacy headings dark in light
+   mode. Do not weaken it -- use .text-on-accent to opt out instead. */
 .light-mode .text-white {
-  color: #0f172a;
+  color: rgb(var(--ink));
 }
 
-/* Card styles for light mode */
-.light-mode .black-gradient {
-  background: #f1f5f9;
-  box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.1);
+/* White text that sits on a saturated background and must stay white in BOTH
+   themes. Deliberately not named text-white so the rule above can't reach it. */
+.text-on-accent {
+  color: #ffffff;
 }
 
-/* Toggle Switch Styles */
-.toggle-checkbox {
-  transition: transform 0.3s;
+.black-gradient {
+  background: rgb(var(--surface-2));
 }
 
-.toggle-checkbox:checked {
-  transform: translateX(1rem);
-  border-color: #2dd4bf;
-}
-
-.toggle-label {
-  transition: background-color 0.3s;
-}
-
-.toggle-checkbox:checked + .toggle-label {
-  background-color: #2dd4bf;
-}
-
-input[type="checkbox"].toggle-checkbox {
-  z-index: 10;
-}
-
-/* Earth canvas styling */
 .earth-container {
   position: relative;
   width: 100%;
@@ -394,87 +532,33 @@ input[type="checkbox"].toggle-checkbox {
   outline: none;
 }
 
-/* Make sure Earth canvas is visible in light mode */
-.light-mode canvas {
-  background-color: transparent !important;
-}
+/* ============================================================================
+   REDUCED MOTION
+   ========================================================================= */
 
-.light-mode .earth-container {
-  background: linear-gradient(to bottom, #e0f2fe, #ffffff);
-}
+@media (prefers-reduced-motion: reduce) {
+  /* Makes the native <a href="#about"> hero button honour the preference for
+     free -- the main reason it stayed an anchor instead of scrollIntoView. */
+  html {
+    scroll-behavior: auto;
+  }
 
-/* Contact and Earth section spacing */
-.contact-section {
-  padding-bottom: 100px;
-  margin-bottom: 40px;
-}
+  .marquee-track {
+    animation: none !important;
+  }
 
-/* Contact section specific styles */
-.light-mode .contact-card {
-  background-color: #ffffff;
-  border: 1px solid #cbd5e1;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  z-index: 10;
-  position: relative;
-}
+  .theme-transition,
+  .theme-transition *,
+  .theme-transition *::before,
+  .theme-transition *::after {
+    transition: none !important;
+  }
 
-.dark-mode .contact-card {
-  background-color: #1d1836;
-  border: 1px solid #2a2558;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-  z-index: 10;
-  position: relative;
-}
-
-/* Experience divider styling */
-.vertical-timeline-element-content ul div {
-  margin-left: -20px !important;
-  width: calc(100% + 20px) !important;
-  list-style: none !important;
-  padding: 0 !important;
-}
-
-/* Navbar styles */
-.navbar-backdrop {
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-/* Navbar underline animations */
-.nav-link {
-  position: relative;
-  overflow: hidden;
-}
-
-.nav-link::before {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background-color: #14b8a6;
-  transition: width 0.3s ease-out;
-}
-
-.nav-link:hover::before,
-.nav-link.active::before {
-  width: 100%;
-}
-
-/* Hamburger menu animation */
-.hamburger-line {
-  transition: all 0.3s ease;
-  transform-origin: center;
-}
-
-/* Smooth scrolling for the whole page */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Mobile menu backdrop */
-.mobile-menu-backdrop {
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

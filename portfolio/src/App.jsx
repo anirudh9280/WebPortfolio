@@ -1,39 +1,33 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { MotionConfig } from "framer-motion";
+
 import {
   About,
+  Analytics,
+  AxisRail,
   Contact,
   Experience,
-  Feedbacks,
+  Footer,
   Hero,
   Navbar,
-  Tech,
+  SkillsMarquee,
   Works,
-  StarsCanvas,
-  Footer,
-  Analytics,
 } from "./components";
-import { ThemeProvider, useTheme } from "./context/ThemeContext";
+import { ThemeProvider } from "./context/ThemeContext";
 
 function HomePage() {
-  const { darkMode } = useTheme();
-
   return (
-    <div className={`relative z-0 ${darkMode ? "bg-primary" : "bg-slate-100"}`}>
-      <div
-        className={`${darkMode ? "bg-hero-pattern" : "bg-gradient-to-b from-blue-100 to-white"} bg-cover bg-no-repeat bg-center`}
-      >
-        <Navbar />
+    <div className="relative z-0 bg-ground">
+      <Navbar />
+      <AxisRail />
+      <main>
         <Hero />
-      </div>
-      <About />
-      <Experience />
-      <Tech />
-      <Works />
-      <Feedbacks />
-      <div className="relative z-0">
+        <About />
+        <Experience />
+        <SkillsMarquee />
+        <Works />
         <Contact />
-        <StarsCanvas />
-      </div>
+      </main>
       <Footer />
     </div>
   );
@@ -42,12 +36,16 @@ function HomePage() {
 function App() {
   return (
     <ThemeProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/analytics" element={<Analytics />} />
-        </Routes>
-      </BrowserRouter>
+      {/* Covers every framer-motion animation at once, including the section
+          entrances, so reduced-motion doesn't have to be handled per-component. */}
+      <MotionConfig reducedMotion="user">
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/analytics" element={<Analytics />} />
+          </Routes>
+        </BrowserRouter>
+      </MotionConfig>
     </ThemeProvider>
   );
 }
