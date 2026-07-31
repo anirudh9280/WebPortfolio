@@ -16,8 +16,11 @@ import ucsdlogo from "./ucsdlogo.png";
 import narvar from "./company/narvar.svg";
 import salk from "./company/salk.svg";
 
-// Project covers. The seven SVGs are hand-authored abstract plots of what each
-// project actually does; the two PNGs are screenshots from the older projects.
+// Project covers, all hand-authored SVG at 640x400 on the same dark panel:
+// abstract plots of what each project actually does, and layout wireframes for
+// the ones that are sites rather than analyses. Kept as one system on purpose --
+// the two older projects used to carry photo screenshots, which read as a
+// different design language sitting next to the plots.
 import chainsense from "./projects/chainsense.svg";
 import talentlens from "./projects/talentlens.svg";
 import nextup from "./projects/nextup.svg";
@@ -25,8 +28,8 @@ import evocharge from "./projects/evocharge.svg";
 import keysofparkinsons from "./projects/keysofparkinsons.svg";
 import cred from "./projects/cred.svg";
 import spayla from "./projects/spayla.svg";
-import van from "./van.png";
-import ecommerce from "./ecommerce.png";
+import van from "./projects/vanlife.svg";
+import ecommerce from "./projects/ecommerce.svg";
 
 export {
   logo,
